@@ -1,0 +1,22 @@
+Data = {
+	"User_Date_Creation": "01/10/2020",
+	"Nbr_Orders": 4,
+	"Address_Changed_Days": 45,
+	"Browsing_Time_Seconds": 500,
+	"Page_Visited": 3,
+	"Item": 
+		[
+		 {"item1":"computer", "Quantiy": 1},
+		 {"item2":"hard drive", "Quantiy": 1},
+		 {"item3":"SSD", "Quantiy": 1}
+		],
+	"Payment_Provider": "Paypal",
+	"Card_Nationality": "FR",
+	"Address_Country": "UK",
+	"Total": 550,
+	"Address": "90 rue de voullé",
+	"City": "Paris",
+	"Delivery_Company": "UPS",
+	"Average_Basket_Price": 100,
+	
+}
