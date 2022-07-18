@@ -7,6 +7,7 @@
 	"Address_Changed_Days": 45,
 	"Browsing_Time_Seconds": 500,
 	"Page_Visited": 3,
+	"Nbr_Tickets_Opened": 2,
 	"Item": 
 		[
 		 {"item1":"computer", "Quantiy": 1},
