@@ -24,7 +24,7 @@
 	"Province": "IDF",
 	"Email": "test@gmail.com",
 	"Dialling_Code": "+33",
-	"Phone": 0673788611,
+	"Phone": "0673788611",
 	"Delivery_Company": "UPS",
 	"Delivery_Place" : "collection_point",
 	"Delivery_Option": "Priority",
