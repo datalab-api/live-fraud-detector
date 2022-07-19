@@ -4,7 +4,6 @@
 	"User_Hour_Creation": "00:01:10",
 	"Payment_Date": "01/10/2020",
 	"Payment_Hour": "00:10:40",
-	"Nbr_Orders": 4,
 	"Address_Changed_Days": 45,
 	"Browsing_Time_Seconds": 500,
 	"Page_Visited": 3,
@@ -30,5 +29,6 @@
 	"Delivery_Place" : "collection_point",
 	"Delivery_Option": "Priority",
 	"Voucher": false,
+	"Subscription:": true,
 	"Total": 550
 }
