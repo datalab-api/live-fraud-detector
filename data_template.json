@@ -1,4 +1,5 @@
 {
+	"Account_ID": 2,
 	"User_Date_Creation": "01/10/2020",
 	"User_Hour_Creation": "00:01:10",
 	"Payment_Date": "01/10/2020",
@@ -23,13 +24,11 @@
 	"City": "Paris",
 	"ZIP": "75015",
 	"Province": "IDF",
-	"Email": "test@gmail.com",
+	"Email_Changed_Days": 30,
 	"Dialling_Code": "+33",
-	"Phone": "0673788611",
 	"Delivery_Company": "UPS",
 	"Delivery_Place" : "collection_point",
 	"Delivery_Option": "Priority",
 	"Voucher": false,
-	"Average_Basket_Price": 100,
-	"Total": 550,
+	"Total": 550
 }
