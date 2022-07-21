@@ -8,6 +8,7 @@
 	"Browsing_Time_Seconds": 500,
 	"Page_Visited": 3,
 	"Nbr_Tickets_Opened": 2,
+	"Nbr_previous_orders": 4,
 	"Item": 
 		[
 		 {"item1":"computer", "Quantiy": 1},
