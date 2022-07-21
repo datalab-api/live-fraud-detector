@@ -16,6 +16,8 @@ Page_Visited: random number [1;50]
 
 Nbr_Tickets_Opened: random number [0;10]
 
+Nbr_previous_orders: random number [0;20]
+
 Item: A client can order [1;7] items
 
 Payment_Provider: 
@@ -44,7 +46,7 @@ Province: Delivery_Address's Province - https://randommer.io/random-address
 
 Email_Changed_Days: random number [0;today-User_Date_Creation]: 
 
-Dialling_Code: Dialling_Code of the phone number country. Use CountryCode.json to map the country with it's dialling code
+Dialling_Code: Dialling_Country code of the phone number. Use CountryCode.json to map the country with it's dialling code
 
 Delivery_Company: [Colissimo, Chronospost, DPD, Mondial Relay, DHL, FedEx, UPS, GLS, DB Schenker, Whistl, Heyworld, Omniva, Direct Link, Bpost, BRT, Asendia, PostNL, Hermes UK, Royal Mail]
 
