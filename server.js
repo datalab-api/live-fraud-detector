@@ -1,6 +1,5 @@
 'use strict';
-require("rootpath")();
-require("dotenv").config({ path: './.env' })
+require("dotenv").config({ path: './.env.local' })
 const https = require("https");
 const http = require('http');
 const express = require("express");
@@ -14,15 +13,13 @@ var log4js = require("log4js");
 var logger = log4js.getLogger();
 logger.level = "debug";
 
-
 const app = express();
 
 // process .env 
 const PORT = process.env.PORT || 8080;
 const HOSTNAME = process.env.HOST_API;
-// const MONGO_URI = process.env.MONGO_URI_ATLAS;
-const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}\
-@kyndryl-mdb-livefraudde.xzg6f.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
+const MONGO_URI = process.env.MONGO_URI_HOST;
+//const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@kyndryl-mdb-livefraudde.xzg6f.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
 
 const optionsMongose = {
   useNewUrlParser: true,
@@ -32,7 +29,7 @@ const optionsMongose = {
   serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
   socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 };
-mongoose.connect(mongo_uri, optionsMongose).then(() => {
+mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   logger.info(" MongoDB : Connexion  etablie en success ....        ");
 })
   .catch((err) => {
@@ -78,8 +75,8 @@ app.use(session({
 }))
 
 
-// path apps route
-
+var generateData = require('./back-node/services/dataset.service');
+generateData.loadData()
 
 http.createServer(corsOptions, app).listen(PORT, () => {
   logger.info(` Server running at http://${HOSTNAME}:${PORT} ...`);
