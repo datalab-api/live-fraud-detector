@@ -1,0 +1,63 @@
+In this scenario, we supposed that the account is hacked with a credit card linked to it:
+
+Account_ID: [0, 100 000] (the idea is to have multiple orders from the same person)
+
+User_Date_Creation: random date in the past
+
+User_Hour_Creation: random time (xx:xx:xx)
+
+Payment_Date: random date in the past after User_Date_Creation
+
+Payment_Hour: random time (xx:xx:xx)
+
+// Address_Changed_Days: [0]
+
+Browsing_Time_Seconds: random number in seconds [10;3600]
+
+Page_Visited: random number [1;50]
+
+Nbr_Tickets_Opened: random number [0;10]
+
+Nbr_previous_orders: random number [0;20]
+
+Item: A client can order [1;7] items
+
+Payment_Provider: 
+[Caisse Epargne, Credit Agricole, BNP, LCL, La Poste, Societe Generale, BRED, Banque Populaire, HSBC, Banque Populaire, Credit Mutuel] Odds 20%
+[N26, Boursorama, ING, Fortuneo, Amazon Pay, Apple Pay, Atos, Authorize.Net, Ingenico, Klarna, Paypal, Stripe, Trustly, Revolut] Odds 80%
+
+Card_Nationality: 
+[BE, EL, LT, PT, BG, UK, ES, LU, RO, CZ, FR, HU, SI, DK, HR, MT, SK, DE, IT, NL, FI, EE, CY, AT, SE , IE, LV, PL, NO, CH, LI, IS]; Odds 30%
+[AL, ME, RS, MK, TR, BA, XK, AM, BY, GE, AZ, MD, UA]; Odds 40%
+[DZ, LB, SY, EG, LY, TN, IL, MA, JO, PS]; Odds 20%
+[RU] Odds 10%
+
+Address_Country: Same than Card_Nationality - https://randommer.io/random-address
+
+Delivery_Address: random address in the country - https://randommer.io/random-address
+
+Billing_Country: Same options than Card_Nationality - 95 odds of 100 to have the same billing and shipping address
+
+Biling_Address: 95 odds of 100 to have the same billing and shipping address - https://randommer.io/random-address
+
+City: Delivery_Address's city - https://randommer.io/random-address
+
+ZIP: Delivery_Address's ZIP  - https://randommer.io/random-address
+
+Province: Delivery_Address's Province - https://randommer.io/random-address
+
+// Email_Changed_Days: [0]
+
+Dialling_Code: Dialling_Country code of the phone number. Use CountryCode.json to map the country with it's dialling code
+
+Delivery_Company: [Colissimo, Chronospost, DPD, Mondial Relay, DHL, FedEx, UPS, GLS, DB Schenker, Whistl, Heyworld, Omniva, Direct Link, Bpost, BRT, Asendia, PostNL, Hermes UK, Royal Mail]
+
+Delivery_Place: [collection_point, home, shop] odds 80/19/1
+
+Delivery_Option: [Standard, Priority, Express] : odds 20/30/50
+
+Voucher: false
+
+Subscription: [false,true]
+
+Total: [80;300]

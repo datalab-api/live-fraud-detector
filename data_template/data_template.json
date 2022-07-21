@@ -1,13 +1,14 @@
 {
+	"Account_ID": 2,
 	"User_Date_Creation": "01/10/2020",
 	"User_Hour_Creation": "00:01:10",
 	"Payment_Date": "01/10/2020",
 	"Payment_Hour": "00:10:40",
-	"Nbr_Orders": 4,
 	"Address_Changed_Days": 45,
 	"Browsing_Time_Seconds": 500,
 	"Page_Visited": 3,
 	"Nbr_Tickets_Opened": 2,
+	"Nbr_previous_orders": 4,
 	"Item": 
 		[
 		 {"item1":"computer", "Quantiy": 1},
@@ -23,13 +24,12 @@
 	"City": "Paris",
 	"ZIP": "75015",
 	"Province": "IDF",
-	"Email": "test@gmail.com",
+	"Email_Changed_Days": 30,
 	"Dialling_Code": "+33",
-	"Phone": "0673788611",
 	"Delivery_Company": "UPS",
 	"Delivery_Place" : "collection_point",
 	"Delivery_Option": "Priority",
 	"Voucher": false,
-	"Average_Basket_Price": 100,
-	"Total": 550,
+	"Subscription:": true,
+	"Total": 550
 }
