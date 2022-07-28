@@ -21,6 +21,8 @@ const HOSTNAME = process.env.HOST_API;
 const MONGO_URI = process.env.MONGO_URI_HOST;
 //const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@kyndryl-mdb-livefraudde.xzg6f.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
 
+const initData = require('./back-node/services/init.service');
+
 const optionsMongose = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -30,10 +32,14 @@ const optionsMongose = {
   socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 };
 mongoose.connect(MONGO_URI, optionsMongose).then(() => {
-  logger.info(" MongoDB : Connexion  etablie en success ....        ");
+  logger.info("MongoDB : Connection established successfully ....");
+  initData.initialyRoles();
+  initData.initialyUser();
+  initData.loadCountryCode();
+  initData.initDataset();
 })
   .catch((err) => {
-    logger.error(` MongoDB Connexion Error : ${err}`);
+    logger.error(`MongoDB Connexion Error : ${err}`);
     process.exit();
   });
 
@@ -74,10 +80,8 @@ app.use(session({
   }
 }))
 
-
-var generateData = require('./back-node/services/dataset.service');
-generateData.loadData()
+require("./back-node/routes/auth.routes")(app);
 
 http.createServer(corsOptions, app).listen(PORT, () => {
-  logger.info(` Server running at http://${HOSTNAME}:${PORT} ...`);
+  logger.info(`Server running at http://${HOSTNAME}:${PORT} ...`);
 });

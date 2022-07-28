@@ -7,4 +7,8 @@ const db = {};
 db.mongoose = mongoose;
 
 db.dataset = require("./dataset.model");
+db.user = require("./user.model");
+db.role = require("./role.model");
+db.country = require("./country-code.model");
+
 module.exports = db;
