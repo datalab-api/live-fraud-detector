@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/datalab-api/live-fraud-detector#readme",
   "dependencies": {
+    "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -39,7 +40,8 @@
     "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "log4js": "^6.6.0",
-    "mongoose": "^6.4.4"
+    "mongoose": "^6.4.4",
+    "swagger-ui-express": "^4.5.0"
   },
   "engines": {
     "node": "v16.16.0",

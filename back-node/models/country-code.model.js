@@ -20,3 +20,4 @@ const Country = mongoose.model(
 );
 
 module.exports = Country;
+

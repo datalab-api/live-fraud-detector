@@ -13,5 +13,9 @@ module.exports = {
     USER_FIND: '/get/:id',
     USER_UPDATE: '/edit/:id',
     USER_DELETE: '/delete/:id',
-    FIND_ALL: '/all',
+
+    ADRESSE_BASE : '/adresse',
+    ADRESSE_CREATE : '/add',
+    ADRESSE_FIND_BY_ZIP : 'get/:zip',
+    ADRESSE_FIND_ALL: '/list'
 }

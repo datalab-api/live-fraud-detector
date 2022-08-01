@@ -1,14 +1,15 @@
-'use strict';
-require("dotenv").config({ path: './.env.local' })
+"use strict";
+require("dotenv").config({ path: "./.env.local" })
 const https = require("https");
-const http = require('http');
+const http = require("http");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
-const helmet = require('helmet');
-var session = require('express-session')
+const helmet = require("helmet");
+var session = require("express-session");
+const swaggerUi = require("swagger-ui-express");
 var log4js = require("log4js");
 var logger = log4js.getLogger();
 logger.level = "debug";
@@ -21,12 +22,12 @@ const HOSTNAME = process.env.HOST_API;
 const MONGO_URI = process.env.MONGO_URI_HOST;
 //const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@kyndryl-mdb-livefraudde.xzg6f.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
 
-const initData = require('./back-node/services/init.service');
+const initData = require("./back-node/services/init.service");
 
 const optionsMongose = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  autoIndex: true, // Don't build indexes
+  autoIndex: true, // Don"t build indexes
   maxPoolSize: 10, // Maintain up to 10 socket connections
   serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
   socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
@@ -36,6 +37,7 @@ mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   initData.initialyRoles();
   initData.initialyUser();
   initData.loadCountryCode();
+  initData.loadCityFr();
   initData.initDataset();
 })
   .catch((err) => {
@@ -69,18 +71,24 @@ app.use(helmet.xssFilter());
 // parse requests of content-type = application/json
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.set('trust proxy', 1) // trust first proxy
+app.set("trust proxy", 1) // trust first proxy
 app.use(session({
-  secret: require('./back-node/config/constantes').secret,
+  secret: require("./back-node/config/constantes").secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
     secure: true,
     maxAge: 60000
   }
-}))
+}));
+
+// import doc swagger api 
+const swaggerDocument = require('./back-node/swagger.json');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 require("./back-node/routes/auth.routes")(app);
+require("./back-node/routes/user.routes")(app);
+require("./back-node/routes/geopostecode.route")(app);
 
 http.createServer(corsOptions, app).listen(PORT, () => {
   logger.info(`Server running at http://${HOSTNAME}:${PORT} ...`);

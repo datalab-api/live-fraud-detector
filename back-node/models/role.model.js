@@ -10,6 +10,8 @@ const Role = mongoose.model(
         versionKey: false,
         transform: function (doc, ret) {
             delete ret._id;
+            delete ret.createdAt;
+            delete ret.updatedAt;
         },
     })
 );

@@ -1,0 +1,311 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "The Microdata REST API allows searching, browsing and viewing the catalog. Use the metadata endpoints to extract detailed study metadata as JSON.",
+    "version": "1.0.0",
+    "title": "Dataset  API",
+    "x-logo": {
+      "url": "",
+      "backgroundColor": "#FFFFFF",
+      "altText": ""
+    }
+  },
+  "basePath": "/api/REST/services/v1",
+  "tags": [
+    {
+      "name": "Collections",
+      "description": "Collections"
+    },
+    {
+      "name": "Catalog",
+      "description": "API to browse, search and explore studies in the catalog"
+    },
+    {
+      "name": "Metadata",
+      "description": "Access metadata and documentation available for the studies in the catalog"
+    }
+  ],
+  "x-tagGroups": [
+    {
+      "name": "Collections",
+      "tags": [
+        "Collections"
+      ]
+    },
+    {
+      "name": "Catalog",
+      "tags": [
+        "Catalog"
+      ]
+    },
+    {
+      "name": "Metadata",
+      "tags": [
+        "Metadata"
+      ]
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/catalog/collections": {
+      "get": {
+        "tags": [
+          "Dataset"
+        ],
+        "summary": "List all collections",
+        "description": "Returns a list of all collections",
+        "operationId": "listCollections",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Dataset"
+            }
+          }
+        }
+      }
+    },
+    "/catalog/{idno}": {
+      "get": {
+        "tags": [
+          "Catalog",
+          "Metadata"
+        ],
+        "summary": "Get study information",
+        "operationId": "singleDataset",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "IDNo",
+            "in": "path",
+            "title": "Study unique ID",
+            "description": "Study unique ID number",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "id_format",
+            "in": "query",
+            "title": "ID format",
+            "description": "To use the ID values instead of the IDNo, set id_format to ID",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Dataset"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Dataset": {
+      "type": "object",
+      "properties": {
+        "account_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "user_date_creation": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "user_hour_creation": {
+          "type": "string",
+          "enum": [
+            "internal",
+            "external"
+          ]
+        },
+        "payment_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Is the data embargoed?"
+        },
+        "payment_hour": {
+          "type": "string",
+          "description": "indicate the terms of the embargo e.g. time period and any other special instructions."
+        },
+        "adresse_changed_days": {
+          "type": "integer",
+          "description": "Notes for the deposit reviewers"
+        },
+        "browsing_time_seconds": {
+          "type": "integer",
+          "description": "Notes for the deposit reviewers"
+        },
+        "page_visited": {
+          "type": "integer"
+        },
+        "number_ticket_opened": {
+          "type": "integer",
+          "format": "date-time"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item1": {
+                "type": "string"
+              },
+              "Quantiy": {
+                "type": "int"
+              }
+            }
+          }
+        },
+        "payment_provider": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "card_nationality": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "address_country": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "delivery_address": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "billing_country": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "billing_address": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "city": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "zip": {
+          "type": "int",
+          "description": "Notes for the deposit reviewers"
+        },
+        "province": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "email_changed_days": {
+          "type": "int",
+          "description": "Notes for the deposit reviewers"
+        },
+        "dialling_code": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "delivery_company": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "delivery_place": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "delivery_option": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
+        "voucher": {
+          "type": "boolean",
+          "description": "Notes for the deposit reviewers"
+        },
+        "subscription": {
+          "type": "boolean",
+          "description": "Notes for the deposit reviewers"
+        },
+        "total": {
+          "type": "decimal",
+          "description": "Notes for the deposit reviewers"
+        }
+      },
+      "xml": {
+        "name": "MetadataSchema"
+      }
+    },
+    "CountryCode": {
+      "type": "object",
+      "properties": {
+        "dial_code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string",
+          "title": "Country name"
+        },
+        "code": {
+          "type": "string",
+          "title": "Country ISO 3 code"
+        }
+      },
+      "xml": {
+        "name": "CountryCodeSchema"
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "email": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Project ID"
+        },
+        "password": {
+          "type": "string"
+        },
+        "roles": {
+          "$ref": "#/definitions/Role"
+        }
+      },
+      "required": [
+        "pid",
+        "title"
+      ],
+      "xml": {
+        "name": "Citation"
+      }
+    },
+    "Role": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}

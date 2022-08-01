@@ -75,11 +75,11 @@ basicAuth = async (req,res,next)=>{
     }).populate("roles", "-__v")
         .exec(function (err, user) {
             if (!user) {
-                return res.status(404).json({ message: `ERREUR : le nom d\'utilisateur ou le mot de passe est incorrect` });
+                return res.status(404).json({ message: `Username or password is incorrect` });
             } else {
                 if (!bcrypt.compareSync(password, user.password)) {
                     return res.status(404).json({
-                        message: `ERREUR : le nom d\'utilisateur ou le mot de passe est incorrect !`
+                        message: `Username or password is incorrect`
                     });
                 }else{
                     

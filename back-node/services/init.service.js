@@ -1,30 +1,37 @@
 const db = require("../models/index");
 var bcrypt = require("bcryptjs");
 const { faker } = require('@faker-js/faker');
+var axios = require('axios');
+
 const dataRandom = require('../config/constantes');
+
 // logger info 
 var log4js = require("log4js");
 var logger = log4js.getLogger();
 logger.level = "debug";
-faker.locale = 'fr';
+
 
 const Role = db.role;
 const User = db.user;
 const Dataset = db.dataset;
 const Country = db.country;
+const GeoPostCode = db.geopostcode;
 
 var JsonDataCountry = require("../../data_template/CountryCodes.json");
 const {
     USERNAME_ADMIN,
     PASSWORD_ADMIN,
-    EMAIL_ADMIN
+    EMAIL_ADMIN,
+    FR_URI_CITY,
+    FR_URI_METHOD
 } = process.env;
 
 module.exports = {
     initialyRoles,
     initialyUser,
     initDataset,
-    loadCountryCode
+    loadCountryCode,
+    loadCityFr
 };
 
 function initialyRoles() {
@@ -96,7 +103,7 @@ async function initialyUser() {
     });
 }
 async function loadCountryCode() {
-    
+
     Country.estimatedDocumentCount((error, count) => {
         if (count === 0 && !error) {
             logger.info("+ Load Coutry Code in MongoDB ... ");
@@ -114,6 +121,52 @@ async function loadCountryCode() {
     });
 
 }
+async function loadCityFr() {
+
+    var config = {
+        method: FR_URI_METHOD,
+        url: FR_URI_CITY,
+        headers: {}
+    };
+    GeoPostCode.estimatedDocumentCount((error, count) => {
+        if (count === 0 && !error) {
+            axios(config).then(function (response) {
+                var items = response.data.records;
+                logger.info("+ Load city  Code in MongoDB ... ");
+                Country.findOne({name: "France"}, function (error, country_current) {
+                    if(error){
+                        logger.error(error);
+                    }
+                    logger.info(country_current);
+                    items.forEach(
+                        item => logger.info(`+++ Added  to country collection`)
+                        //  new GeoPostCode({
+                        //     name_of_the_municipality: item.fields.nom_de_la_commune,
+                        //     routing_label: item.fields.libelle_d_acheminement,
+                        //     code_postal:item.fields.code_postal,
+                        //     gps_cordinates:item.fields.coordonnees_gps,
+                        //     country: country_current._id
+                        // }).save((err) => {
+                        //     if (err) {
+                        //         logger.error(err);
+                        //     }
+                        //     logger.info(`+++ Added  to country collection`);
+                        // })
+                    );   
+                });                             
+        
+            }).catch(function (error) {
+                logger.error(error);
+            });
+            
+        } else {
+            logger.info("Data Country is  existe  .....");
+        }
+    });
+    
+
+
+}
 async function initDataset() {
 
     Dataset.estimatedDocumentCount((err, count) => {
@@ -124,10 +177,12 @@ async function initDataset() {
                 }
             });
             //const randomCountryCode = countryCode[Math.floor(Math.random() * countryCode.length)];
-            const day= new String(faker.date.recent());
+            faker.locale = 'fr';
+            const day = new String(faker.date.recent());
             logger.info(day)
             var tmp = day.split('T');
             logger.info(tmp.forEach(items => logger.info(items)));
+
             const dataSetTmp = {
                 account_id: faker.random.numeric(2),
                 user_date_creation: faker.date.recent(),

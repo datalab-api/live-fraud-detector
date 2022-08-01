@@ -15,14 +15,14 @@ checkDuplicateUsername = (req, res, next) => {
     }
 
     if (user) {
-      return res.status(404).json({ message: `ERREUR : Un compte existe déjà pour cet utilisateur « ${req.body.username} » ` });
+      return res.status(404).json({ message: `user « ${req.body.username} » not found` });
     }
     next();
   });
 };
 checkBodyExist = (req,res,next) =>{
     if(!req.body){
-        return res.status(401).json({ message: 'ERREUR : le body n\'est pas bien défini, veuillez vérifiez le body' });
+        return res.status(401).json({ message: 'Body not found' });
     }
     next();
 }
@@ -30,7 +30,7 @@ checkUsernameExist = (req,res,next) =>{
     if(req.body.username){
         if(!User.findOne({username: req.body.username})){
             return res.status(404).json({
-                message: `ERROR : désolé, le username « ${req.body.username} » n'existe pas )`
+                message: `username « ${req.body.username} » not found`
             });
         }
     }
@@ -41,7 +41,7 @@ checkRolesExisted = (req, res, next) => {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {
         return res.status(404).json({
-          message: `ERREUR : désolé, le rôle « ${req.body.roles[i]} » n'existe pas )`
+          message: `role « ${req.body.roles[i]} » not found`
         });
         
       }
