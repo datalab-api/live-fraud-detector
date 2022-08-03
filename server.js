@@ -37,8 +37,8 @@ mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   initData.initialyRoles();
   initData.initialyUser();
   initData.loadCountryCode();
-  initData.loadCityFr();
-  initData.initDataset();
+  initData.generatorAdress();
+  //initData.initDataset();
 })
   .catch((err) => {
     logger.error(`MongoDB Connexion Error : ${err}`);
@@ -88,7 +88,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 require("./back-node/routes/auth.routes")(app);
 require("./back-node/routes/user.routes")(app);
-require("./back-node/routes/geopostecode.route")(app);
+require("./back-node/routes/adress.route")(app);
 
 http.createServer(corsOptions, app).listen(PORT, () => {
   logger.info(`Server running at http://${HOSTNAME}:${PORT} ...`);

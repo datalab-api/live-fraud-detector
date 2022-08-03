@@ -1,13 +1,15 @@
 const mongoose = require('mongoose');
 
-const GeoPostCode = mongoose.model(
-    "GeoPostCode",
+const Adress = mongoose.model(
+    "Adress",
     new mongoose.Schema({
-        name_of_the_municipality:{type:String},
-        routing_label: {type:String,unique:true},
-        code_postal: {type:Number },
+        adress:{type:String},
+        name: {type:String},
+        region: {type: String },
+        city: {type: String },
+        province: {type: String },
         gps_cordinates:{type:Array},
-        country: {
+        ref_country: {
             type:mongoose.Schema.Types.ObjectId,
             ref:"Country"
         }
@@ -24,4 +26,4 @@ const GeoPostCode = mongoose.model(
     })
 );
 
-module.exports = GeoPostCode;
+module.exports = Adress;

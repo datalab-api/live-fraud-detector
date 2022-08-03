@@ -5,6 +5,7 @@ const Role = db.role;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+var CryptoJS = require("crypto-js");
 
 
 signup = (req, res) => {
@@ -12,8 +13,10 @@ signup = (req, res) => {
         return res.status(400).json({ message: 'ERREUR : le body n\'est pas bien défini, veuillez vérifiez le body' });
     }
     const user = new User({
+        //username:  CryptoJS.AES.encrypt(JSON.stringify(req.body.username), config.secret).toString(),
+        //email:  CryptoJS.AES.encrypt(JSON.stringify(req.body.email), config.secret).toString(),
         username: req.body.username,
-        email: req.body.email,
+        email: req.body.email,        
         password: bcrypt.hashSync(req.body.password, 8)
     });
 

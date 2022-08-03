@@ -10,6 +10,6 @@ db.dataset = require("./dataset.model");
 db.user = require("./user.model");
 db.role = require("./role.model");
 db.country = require("./country-code.model");
-db.geopostcode =require("./geopostcode.model");
+db.adress =require("./adress.model");
 
 module.exports = db;

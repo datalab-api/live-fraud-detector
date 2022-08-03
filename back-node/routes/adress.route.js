@@ -1,5 +1,5 @@
 const { authJwt, verifySignUp} = require('../middlewares');
-const controller = require("../controllers/geopostcode.controller");
+const controller = require("../controllers/adress.controller");
 const BaseUrl = require('../config/endpoint.config');
 
 module.exports = function(app) {
@@ -11,24 +11,24 @@ module.exports = function(app) {
         next();
       });
     app.post(
-        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.ADRESSE_BASE + BaseUrl.ADRESSE_CREATE,
+        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.ADRESS_BASE + BaseUrl.ADRESS_CREATE,
         [
             authJwt.verifyToken,
             authJwt.isAdmin
         ],
-        controller.createGeoPostCode
+        controller.createAdress
     );
     // find all adresse
     app.get(
-        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.ADRESSE_BASE + BaseUrl.ADRESSE_FIND_ALL,
+        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.ADRESS_BASE + BaseUrl.ADRESS_FIND_ALL,
         [authJwt.verifyToken, authJwt.isAdmin],
-        controller.findAllGeoPostCode
+        controller.findAllAdress
     );
 
-    // find adresse info by zip
+    // find adresse info by povicne
     app.get(
-        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.ADRESSE_BASE + BaseUrl.ADRESSE_FIND_BY_ZIP,
+        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.ADRESS_BASE + BaseUrl.ADRESS_FIND_BY_ZIP,
         [authJwt.verifyToken],
-        controller.findGeoPostCodeByZip
+        controller.findAdressByProvince
     );
 };

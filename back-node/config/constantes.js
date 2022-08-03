@@ -44,26 +44,31 @@ module.exports = {
     delivery_options: ["Standard", "Priority", "Express"],
     delivery_places: ["collection_point", "home", "shop"],
     delivery_companies: [
-        "Colissimo", 
-        "Chronospost", 
-        "DPD", 
-        "Mondial Relay", 
-        "DHL", 
-        "FedEx", 
-        "UPS", 
+        "Colissimo",
+        "Chronospost",
+        "DPD",
+        "Mondial Relay",
+        "DHL",
+        "FedEx",
+        "UPS",
         "GLS",
-        "DB Schenker", 
-        "Whistl", 
-        "Heyworld", 
+        "DB Schenker",
+        "Whistl",
+        "Heyworld",
         "Omniva",
-        " Direct Link", 
-        "Bpost", 
-        "BRT", 
-        "Asendia", 
+        " Direct Link",
+        "Bpost",
+        "BRT",
+        "Asendia",
         "PostNL",
-        " Hermes UK", 
+        " Hermes UK",
         "Royal Mail"
-    ]
-  
+    ],
 
+    options: {
+        'method': process.env.URI_METHOD,
+        'url': 'http://api.3geonames.org/randomland.fr.json',
+        'headers': {
+        }
+    }
 };

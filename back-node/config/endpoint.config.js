@@ -14,8 +14,8 @@ module.exports = {
     USER_UPDATE: '/edit/:id',
     USER_DELETE: '/delete/:id',
 
-    ADRESSE_BASE : '/adresse',
-    ADRESSE_CREATE : '/add',
-    ADRESSE_FIND_BY_ZIP : 'get/:zip',
-    ADRESSE_FIND_ALL: '/list'
+    ADRESS_BASE : '/adresse',
+    ADRESS_CREATE : '/add',
+    ADRESS_FIND_BY_ZIP : 'get/:zip',
+    ADRESS_FIND_ALL: '/list'
 }

@@ -1,7 +1,10 @@
 const db = require("../models/index");
 var bcrypt = require("bcryptjs");
 const { faker } = require('@faker-js/faker');
-var axios = require('axios');
+var CryptoJS = require("crypto-js");
+const configSecret = require("../config/constantes");
+var request = require('request');
+
 
 const dataRandom = require('../config/constantes');
 
@@ -15,23 +18,32 @@ const Role = db.role;
 const User = db.user;
 const Dataset = db.dataset;
 const Country = db.country;
-const GeoPostCode = db.geopostcode;
+const Adress = db.adress;
 
 var JsonDataCountry = require("../../data_template/CountryCodes.json");
 const {
     USERNAME_ADMIN,
     PASSWORD_ADMIN,
     EMAIL_ADMIN,
-    FR_URI_CITY,
-    FR_URI_METHOD
+    URI_METHOD,
+    API_ADRESS_RANDOM
 } = process.env;
+
+
+var options = {
+    'method': URI_METHOD,
+    'url': 'http://api.3geonames.org/randomland.fr.json',
+    'headers': {
+    }
+};
+
 
 module.exports = {
     initialyRoles,
     initialyUser,
     initDataset,
     loadCountryCode,
-    loadCityFr
+    generatorAdress
 };
 
 function initialyRoles() {
@@ -108,12 +120,14 @@ async function loadCountryCode() {
         if (count === 0 && !error) {
             logger.info("+ Load Coutry Code in MongoDB ... ");
             JsonDataCountry.forEach(
-                element => new Country(element).save((err) => {
-                    if (err) {
-                        logger.error(err);
-                    }
-                    logger.info(`+++ Added ${element.dial_code} ${element.name} to country collection`);
-                })
+                (element) => {
+                    new Country(element).save((err) => {
+                        if (err) {
+                            logger.error(err);
+                        }
+                        logger.info(`+++ Added ${element.dial_code} ${element.name} to country collection`);
+                    })
+                }
             );
         } else {
             logger.info("Data Country is  existe  .....");
@@ -121,52 +135,71 @@ async function loadCountryCode() {
     });
 
 }
-async function loadCityFr() {
 
-    var config = {
-        method: FR_URI_METHOD,
-        url: FR_URI_CITY,
-        headers: {}
-    };
-    GeoPostCode.estimatedDocumentCount((error, count) => {
+async function generatorAdress() {
+
+    Adress.estimatedDocumentCount((error, count) => {
         if (count === 0 && !error) {
-            axios(config).then(function (response) {
-                var items = response.data.records;
-                logger.info("+ Load city  Code in MongoDB ... ");
-                Country.findOne({name: "France"}, function (error, country_current) {
-                    if(error){
+
+            logger.info("+ Load city  Code in MongoDB ... ");
+            Country.find().sort({ name: 1 })
+                .exec((err, countries) => {
+                    if (err) {
                         logger.error(error);
                     }
-                    logger.info(country_current);
-                    items.forEach(
-                        item => logger.info(`+++ Added  to country collection`)
-                        //  new GeoPostCode({
-                        //     name_of_the_municipality: item.fields.nom_de_la_commune,
-                        //     routing_label: item.fields.libelle_d_acheminement,
-                        //     code_postal:item.fields.code_postal,
-                        //     gps_cordinates:item.fields.coordonnees_gps,
-                        //     country: country_current._id
-                        // }).save((err) => {
-                        //     if (err) {
-                        //         logger.error(err);
-                        //     }
-                        //     logger.info(`+++ Added  to country collection`);
-                        // })
-                    );   
-                });                             
-        
-            }).catch(function (error) {
-                logger.error(error);
-            });
-            
+
+                    if (!countries) {
+                        logger.error(`No user account exists`);
+                    }
+                    var data = "hello"
+                    // Encrypt
+                    var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), configSecret.secret).toString();
+
+                    // Decrypt
+                    var bytes = CryptoJS.AES.decrypt(ciphertext, configSecret.secret);
+                    var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+                    console.log(decryptedData); // [{id: 1}, {id: 2}]                                         
+
+                    countries.forEach(
+                        (item) => {
+                            //logger.info(`${API_ADRESS_RANDOM}.${item.code}.json`);
+                            options.url = `${API_ADRESS_RANDOM}.${item.code}.json`;
+                            logger.info(options.url)
+                            if (item.code === "FR") {
+                                request(options, function (error, response) {
+                                    if (error) throw new Error(error);
+                                    var items = JSON.parse(response.body);
+                                    new Adress({
+                                        adress: CryptoJS.AES.encrypt(JSON.stringify(faker.address.streetAddress(true)), configSecret.secret).toString(),
+                                        name: CryptoJS.AES.encrypt(JSON.stringify(items.nearest.name), configSecret.secret).toString(),
+                                        region: CryptoJS.AES.encrypt(JSON.stringify(items.nearest.region), configSecret.secret).toString(),
+                                        city: CryptoJS.AES.encrypt(JSON.stringify(items.nearest.city), configSecret.secret).toString(),
+                                        province: CryptoJS.AES.encrypt(JSON.stringify(items.nearest.prov), configSecret.secret).toString(),
+                                        gps_cordinates: { latt: items.nearest.latt, longt: items.nearest.longt },
+                                        ref_country: item._id
+                                    }).save((err) => {
+                                        if (err) {
+                                            logger.error(err);
+                                        }
+                                        logger.info(`+++ Add new address in collection`);
+                                    });
+                                });
+
+                            }
+                            new Promise(r => setTimeout(r, 120000));
+                        }
+                    );
+                });
         } else {
             logger.info("Data Country is  existe  .....");
         }
     });
-    
-
 
 }
+
+
+
 async function initDataset() {
 
     Dataset.estimatedDocumentCount((err, count) => {
@@ -179,9 +212,6 @@ async function initDataset() {
             //const randomCountryCode = countryCode[Math.floor(Math.random() * countryCode.length)];
             faker.locale = 'fr';
             const day = new String(faker.date.recent());
-            logger.info(day)
-            var tmp = day.split('T');
-            logger.info(tmp.forEach(items => logger.info(items)));
 
             const dataSetTmp = {
                 account_id: faker.random.numeric(2),
