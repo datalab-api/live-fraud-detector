@@ -22,7 +22,7 @@ const HOSTNAME = process.env.HOST_API;
 const MONGO_URI = process.env.MONGO_URI_HOST;
 //const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@kyndryl-mdb-livefraudde.xzg6f.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
 
-const initData = require("./back-node/services/init.service");
+const initData = require("./src/services/init.service");
 
 const optionsMongose = {
   useNewUrlParser: true,
@@ -73,7 +73,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("trust proxy", 1) // trust first proxy
 app.use(session({
-  secret: require("./back-node/config/constantes").secret,
+  secret: require("./src/config/constantes").secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -83,12 +83,12 @@ app.use(session({
 }));
 
 // import doc swagger api 
-const swaggerDocument = require('./back-node/swagger.json');
+const swaggerDocument = require('./src/swagger.json');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-require("./back-node/routes/auth.routes")(app);
-require("./back-node/routes/user.routes")(app);
-require("./back-node/routes/adress.route")(app);
+require("./src/routes/auth.routes")(app);
+require("./src/routes/user.routes")(app);
+require("./src/routes/adress.route")(app);
 
 http.createServer(corsOptions, app).listen(PORT, () => {
   logger.info(`Server running at http://${HOSTNAME}:${PORT} ...`);

@@ -20,7 +20,7 @@ const Dataset = db.dataset;
 const Country = db.country;
 const Adress = db.adress;
 
-var JsonDataCountry = require("../../data_template/CountryCodes.json");
+var JsonDataCountry = require("../../../data_template/CountryCodes.json");
 const {
     USERNAME_ADMIN,
     PASSWORD_ADMIN,

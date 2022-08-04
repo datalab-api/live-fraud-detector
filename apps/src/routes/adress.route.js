@@ -25,10 +25,10 @@ module.exports = function(app) {
         controller.findAllAdress
     );
 
-    // find adresse info by povicne
+    // find adresse info by code country
     app.get(
-        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.ADRESS_BASE + BaseUrl.ADRESS_FIND_BY_ZIP,
+        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.ADRESS_BASE + BaseUrl.ADRESS_FIND_BY_CODE,
         [authJwt.verifyToken],
-        controller.findAdressByProvince
+        controller.findAdressByCode
     );
 };

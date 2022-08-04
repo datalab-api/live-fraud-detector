@@ -16,6 +16,8 @@ module.exports = {
 
     ADRESS_BASE : '/adresse',
     ADRESS_CREATE : '/add',
-    ADRESS_FIND_BY_ZIP : 'get/:zip',
-    ADRESS_FIND_ALL: '/list'
+    ADRESS_FIND_BY_CODE : 'get',
+    ADRESS_FIND_ALL: '/list',
+    ADRESS_CRYPTED_CREATE: 'crypted/add',
+    ADRESS_CRYPTED_FIND: 'crypted/get'
 }
