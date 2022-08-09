@@ -19,5 +19,10 @@ module.exports = {
     ADRESS_FIND_BY_CODE : 'get',
     ADRESS_FIND_ALL: '/list',
     ADRESS_CRYPTED_CREATE: 'crypted/add',
-    ADRESS_CRYPTED_FIND: 'crypted/get'
+    ADRESS_CRYPTED_FIND: 'crypted/get',
+
+    DATASET_BASE: '/dataset',
+    DATASET_CREATE: '/add',
+    DATASET_FIND_ALL:'/list',
+    DATA_FIND_BY_NAME : 'get',
 }

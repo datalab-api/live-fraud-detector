@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model(
     "Dataset",
     new mongoose.Schema({
-        account_id:{type:Number, unique:true},
+        account_id: { type: Number },
         user_date_creation: { type: Date },
         user_hour_creation: { type: String },
         payment_date: { type: Date },
@@ -20,17 +20,19 @@ const User = mongoose.model(
         delivery_address: { type: String },
         billing_country: { type: String },
         billing_address: { type: String },
-        city: { type: String },
-        zip: { type: String },
-        province: { type: String },
+        adress: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Adress"
+        },
+        email:{ type: String },
         email_changed_days: { type: String },
         dialling_code: { type: String },
         delivery_company: { type: String },
         delivery_place: { type: String },
         delivery_option: { type: String },
-        voucher: { type: Boolean, default: false},
-        subscription: { type: Boolean, default: false},
-        total: { type: mongoose.Types.Decimal128, min:80, max: 300 }
+        voucher: { type: Boolean, default: false },
+        subscription: { type: Boolean, default: false },
+        total: { type: mongoose.Types.Decimal128, min: 80, max: 800 }
     },
         { timestamps: true }
     ).set("toJSON", {

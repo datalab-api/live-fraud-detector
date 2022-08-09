@@ -19,7 +19,17 @@ exports.findDatasetByName = async (req, res) => {
 
 }
 
-exports.findAll = async (req, res) => {
+exports.findAllDataset = async (req, res) => {
 
+    Dataset.find().populate("adress", "-__v")
+        .exec((err, datasets) => {
+            if (err) {
+                return res.status(500).json({ message: err });
+            }
+
+            if (!datasets) {
+                return res.status(404).json({ message: "Adresse Not found." });
+            }
+            res.status(200).json(datasets);
+     });
 }
-

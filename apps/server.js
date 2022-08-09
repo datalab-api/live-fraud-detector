@@ -35,10 +35,16 @@ const optionsMongose = {
 mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   logger.info("MongoDB : Connection established successfully ....");
   initData.initialyRoles();
+  new Promise(r => setTimeout(r, 120000));
   initData.initialyUser();
+  new Promise(r => setTimeout(r, 120000));
   initData.loadCountryCode();
-  initData.generatorAdress();
-  //initData.initDataset();
+  new Promise(r => setTimeout(r, 120000));
+  initData.generatorAdressFR(200);
+  new Promise(r => setTimeout(r, 120000));
+  //initData.generatorDatasetFR(0);
+  new Promise(r => setTimeout(r, 120000));
+  //initData.initProduct(100);
 })
   .catch((err) => {
     logger.error(`MongoDB Connexion Error : ${err}`);
@@ -89,6 +95,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 require("./src/routes/auth.routes")(app);
 require("./src/routes/user.routes")(app);
 require("./src/routes/adress.route")(app);
+require("./src/routes/dataset.route")(app);
+
 
 http.createServer(corsOptions, app).listen(PORT, () => {
   logger.info(`Server running at http://${HOSTNAME}:${PORT} ...`);

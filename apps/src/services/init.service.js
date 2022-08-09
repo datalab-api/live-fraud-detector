@@ -19,6 +19,7 @@ const User = db.user;
 const Dataset = db.dataset;
 const Country = db.country;
 const Adress = db.adress;
+const Product = db.product;
 
 var JsonDataCountry = require("../../../data_template/CountryCodes.json");
 const {
@@ -41,9 +42,11 @@ var options = {
 module.exports = {
     initialyRoles,
     initialyUser,
-    initDataset,
+    generatorDatasetFR,
     loadCountryCode,
-    generatorAdress
+    generatorAdress,
+    generatorAdressFR,
+    initProduct
 };
 
 function initialyRoles() {
@@ -115,6 +118,15 @@ async function initialyUser() {
     });
 }
 async function loadCountryCode() {
+    // var data = "hello"
+    // // Encrypt
+    // var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), configSecret.secret).toString();
+
+    // // Decrypt
+    // var bytes = CryptoJS.AES.decrypt(ciphertext, configSecret.secret);
+    // var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+    // console.log(decryptedData); // [{id: 1}, {id: 2}]                    
 
     Country.estimatedDocumentCount((error, count) => {
         if (count === 0 && !error) {
@@ -136,113 +148,181 @@ async function loadCountryCode() {
 
 }
 
-async function generatorAdress() {
+function generatorAdress() {
+    logger.info("+ Load city  Code in MongoDB ... ");
 
-    Adress.estimatedDocumentCount((error, count) => {
-        if (count === 0 && !error) {
+    dataRandom.list_countries.forEach(
+        (item) => {
 
-            logger.info("+ Load city  Code in MongoDB ... ");
-            Country.find().sort({ name: 1 })
-                .exec((err, countries) => {
-                    if (err) {
-                        logger.error(error);
+            // set localize faker            
+            faker.locale = item.faker;
+            //for (let index = 0; index < Number(number); index++) {
+            logger.info(item.code)
+            options.url = `http://api.3geonames.org/randomland.${item.code}.json`;
+            logger.info(options.url);
+            const adress = faker.address.streetAddress(true);
+            setTimeout(function () {
+                request(options, function (error, response) {
+                    if (error) {
+                        throw new Error(error);
+                        process.exit();
                     }
-
-                    if (!countries) {
-                        logger.error(`No user account exists`);
-                    }
-                    var data = "hello"
-                    // Encrypt
-                    var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), configSecret.secret).toString();
-
-                    // Decrypt
-                    var bytes = CryptoJS.AES.decrypt(ciphertext, configSecret.secret);
-                    var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-
-                    console.log(decryptedData); // [{id: 1}, {id: 2}]                                         
-
-                    countries.forEach(
-                        (item) => {
-                            //logger.info(`${API_ADRESS_RANDOM}.${item.code}.json`);
-                            options.url = `${API_ADRESS_RANDOM}.${item.code}.json`;
-                            logger.info(options.url)
-                            if (item.code === "FR") {
-                                request(options, function (error, response) {
-                                    if (error) throw new Error(error);
-                                    var items = JSON.parse(response.body);
-                                    new Adress({
-                                        adress: CryptoJS.AES.encrypt(JSON.stringify(faker.address.streetAddress(true)), configSecret.secret).toString(),
-                                        name: CryptoJS.AES.encrypt(JSON.stringify(items.nearest.name), configSecret.secret).toString(),
-                                        region: CryptoJS.AES.encrypt(JSON.stringify(items.nearest.region), configSecret.secret).toString(),
-                                        city: CryptoJS.AES.encrypt(JSON.stringify(items.nearest.city), configSecret.secret).toString(),
-                                        province: CryptoJS.AES.encrypt(JSON.stringify(items.nearest.prov), configSecret.secret).toString(),
-                                        gps_cordinates: { latt: items.nearest.latt, longt: items.nearest.longt },
-                                        ref_country: item._id
-                                    }).save((err) => {
-                                        if (err) {
-                                            logger.error(err);
-                                        }
-                                        logger.info(`+++ Add new address in collection`);
-                                    });
-                                });
-
+                    //logger.info(response.body);        
+                    var randomCountry = JSON.parse(response.body);
+                    if (!randomCountry.nearest.region && !randomCountry.nearest.city && randomCountry.nearest.prov) {
+    
+                        new Adress({
+                            adress: faker.address.streetAddress(true),
+                            name: randomCountry.nearest.name,
+                            region: randomCountry.nearest.region,
+                            city: randomCountry.nearest.city,
+                            province: randomCountry.nearest.prov,
+                            gps_cordinates: { latt: randomCountry.nearest.latt, longt: randomCountry.nearest.longt },
+                            state: randomCountry.nearest.state
+                        }).save((err, product) => {
+                            if (err) {
+                                logger.error(err);
                             }
-                            new Promise(r => setTimeout(r, 120000));
-                        }
-                    );
+                        });
+                        logger.info(index%10 === 0);   
+                    }
+    
                 });
-        } else {
-            logger.info("Data Country is  existe  .....");
+            },1000);         
         }
-    });
-
+    )
 }
 
 
+function generatorAdressFR(number) {
 
-async function initDataset() {
+    logger.info("+ Load city  Code in MongoDB ... ");
+    Country.findOne({ code: 'FR' }).exec((err, country) => {
+        if (err) {
+            return res.status(500).json({ message: err });
+        }
 
-    Dataset.estimatedDocumentCount((err, count) => {
-        if (count === 0 && !err) {
-            var countryCode = Country.find().sort({ name: 1 }).exec((error) => {
-                if (error) {
-                    logger.error(" Data Country not found ...");
+        if (!country) {
+            return res.status(404).json({ message: ` country account does not exist ` });
+        }
+        //logger.info(country);
+        for (let index = 0; index < Number(number); index++) {
+            //logger.info(index);
+            setTimeout(function () {
+                request(options, function (error, response) {
+                    if (error) {
+                        throw new Error(error);
+                        process.exit();
+                    }
+                    //logger.info(response.body);        
+                    var randomCountry = JSON.parse(response.body);
+                    if (!randomCountry.nearest.region && !randomCountry.nearest.city && randomCountry.nearest.prov) {
+                        logger.info({
+                            adress: faker.address.streetAddress(true),
+                            name: randomCountry.nearest.name,
+                            region: randomCountry.nearest.region,
+                            city: randomCountry.nearest.city,
+                            province: randomCountry.nearest.prov,
+                            gps_cordinates: { latt: randomCountry.nearest.latt, longt: randomCountry.nearest.longt },
+                            state: country._id
+                        });
+                        // new Adress({
+                        //     adress: faker.address.streetAddress(true),
+                        //     name: randomCountry.nearest.name,
+                        //     region: randomCountry.nearest.region,
+                        //     city: randomCountry.nearest.city,
+                        //     province: randomCountry.nearest.prov,
+                        //     gps_cordinates: { latt: randomCountry.nearest.latt, longt: randomCountry.nearest.longt },
+                        //     state: country._id
+                        // }).save((err) => {
+                        //     if (err) {
+                        //         logger.error(err);
+                        //     }
+                        // });
+                    }
+    
+                });
+                if(index%10 === 0){
+                    logger.info(index);   
                 }
-            });
-            //const randomCountryCode = countryCode[Math.floor(Math.random() * countryCode.length)];
-            faker.locale = 'fr';
-            const day = new String(faker.date.recent());
-
-            const dataSetTmp = {
-                account_id: faker.random.numeric(2),
-                user_date_creation: faker.date.recent(),
-                user_hour_creation: faker.date.recent(),
-                payment_date: faker.date.recent(),
-                payment_hour: faker.date.recent(),
-                adresse_changed_days: faker.random.numeric(2),
-                browsing_time_seconds: faker.random.numeric(3),
-                page_visited: faker.random.numeric({ min: 0, max: 3 }),
-                number_ticket_opened: faker.random.numeric(1),
-                items: faker.commerce.productName(),
-                payment_provider: dataRandom.payment_Provider_80[Math.floor(Math.random() * dataRandom.payment_Provider_80.length)],
-                card_nationality: dataRandom.card_Nationality_10[Math.floor(Math.random() * dataRandom.card_Nationality_10.length)],
-                address_country: faker.address.countryCode(),
-                delivery_address: faker.address.streetAddress(true),
-                billing_country: faker.address.countryCode(),
-                billing_address: faker.address.streetAddress(true),
-                city: faker.address.cityName(),
-                zip: faker.address.zipCode(),
-                province: faker.address.state(),
-                email_changed_days: faker.random.numeric({ min: 1, max: 30 }),
-                dialling_code: faker.address.countryCode(),
-                delivery_company: dataRandom.delivery_companies[Math.floor(Math.random() * dataRandom.delivery_companies.length)],
-                delivery_place: dataRandom.delivery_places[Math.floor(Math.random() * dataRandom.delivery_places.length)],
-                delivery_option: dataRandom.delivery_options[Math.floor(Math.random() * dataRandom.delivery_options.length)],
-                voucher: faker.datatype.boolean(),
-                subscription: faker.datatype.boolean(),
-                total: faker.commerce.price(80, 800),
-            };
-            logger.info(dataSetTmp);
+            },1000);
+            
         }
+
     });
+
 }
+
+async function initProduct(number) {
+    for (let index = 0; index < Number(number); index++) {
+        new Product({
+            name: faker.commerce.productName(),
+            quantity: Math.floor(Math.random() * 10)
+        }).save((err, product) => {
+            if (err) {
+                logger.error(err);
+                process.exit();
+            }
+            logger.info(`+++ Add new product : ${product} `);
+        });
+    }
+}
+
+async function generatorDatasetFR(number) {
+
+    faker.locale = 'fr';
+
+    Adress.find().sort({ region: 1 }).exec((err, adresses) => {
+
+        adresses.forEach(
+            (index) => {
+
+                const dateRandom = faker.date.between('2010-01-01T00:00:00.000Z', '2020-01-01T00:00:00.000Z');
+                const tmp = dateRandom.toISOString().split('T');
+                const date = tmp[0];
+                const hour = tmp[1].split('.')[0];
+
+                logger.info(product_tmp);
+                new Dataset({
+                    account_id: faker.random.numeric(2),
+                    user_date_creation: date,
+                    user_hour_creation: hour,
+                    payment_date: date,
+                    payment_hour: hour,
+                    adresse_changed_days: faker.random.numeric(2),
+                    browsing_time_seconds: faker.random.numeric(3),
+                    page_visited: faker.random.numeric({ min: 0, max: 3 }),
+                    number_ticket_opened: faker.random.numeric(1),
+                    items: product_tmp,
+                    payment_provider: dataRandom.payment_Provider_80[Math.floor(Math.random() * dataRandom.payment_Provider_80.length)],
+                    card_nationality: dataRandom.card_Nationality_10[Math.floor(Math.random() * dataRandom.card_Nationality_10.length)],
+                    address_country: faker.address.countryCode(),
+                    delivery_address: faker.address.streetAddress(true),
+                    billing_country: faker.address.countryCode(),
+                    billing_address: faker.address.streetAddress(true),
+                    adress: index._id,
+                    email_changed_days: faker.random.numeric({ min: 1, max: 30 }),
+                    email: faker.internet.email(),
+                    dialling_code: faker.address.countryCode(),
+                    delivery_company: dataRandom.delivery_companies[Math.floor(Math.random() * dataRandom.delivery_companies.length)],
+                    delivery_place: dataRandom.delivery_places[Math.floor(Math.random() * dataRandom.delivery_places.length)],
+                    delivery_option: dataRandom.delivery_options[Math.floor(Math.random() * dataRandom.delivery_options.length)],
+                    voucher: faker.datatype.boolean(),
+                    subscription: faker.datatype.boolean(),
+                    total: faker.commerce.price(80, 800),
+                }).save((err, dataset) => {
+                    if (err) {
+                        logger.error(err);
+                        process.exit();
+                    }
+                    logger.info(`+++ Add new product : ${dataset.account_id} `);
+                });
+                new Promise(r => setTimeout(r, 120000));
+            }
+        )
+
+    })
+
+
+}
+
