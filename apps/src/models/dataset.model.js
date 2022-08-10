@@ -1,10 +1,14 @@
 const { truncate } = require('fs/promises');
 const mongoose = require('mongoose');
 
-const User = mongoose.model(
+let counter = 1;
+let CountedId = { type: Number, default: () => counter++ };
+
+
+const Dataset = mongoose.model(
     "Dataset",
     new mongoose.Schema({
-        account_id: { type: Number },
+        account_id: { type: Number, default: () => counter++ },
         user_date_creation: { type: Date },
         user_hour_creation: { type: String },
         payment_date: { type: Date },
@@ -13,20 +17,15 @@ const User = mongoose.model(
         browsing_time_seconds: { type: Number },
         page_visited: { type: Number },
         number_ticket_opened: { type: Number },
-        items: { type: Map, of: String },
+        items: { type: Array },
         payment_provider: { type: String },
         card_nationality: { type: String },
         address_country: { type: String },
-        delivery_address: { type: String },
+        delivery_address: { type: Object },
         billing_country: { type: String },
-        billing_address: { type: String },
-        adress: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Adress"
-        },
-        email:{ type: String },
+        billing_address: { type: Object },
+        email: { type: String },
         email_changed_days: { type: String },
-        dialling_code: { type: String },
         delivery_company: { type: String },
         delivery_place: { type: String },
         delivery_option: { type: String },
@@ -45,6 +44,12 @@ const User = mongoose.model(
     })
 );
 
-module.exports = User;
+
+Dataset.find({ id: { $gt: 0 } }).sort({ id: -1 })
+    .then(([first, ...others]) => {
+        if (first)
+            counter = first.id + 1;
+    });
+module.exports = Dataset;
 
 // cluster 

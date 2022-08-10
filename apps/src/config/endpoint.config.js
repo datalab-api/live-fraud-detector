@@ -25,4 +25,10 @@ module.exports = {
     DATASET_CREATE: '/add',
     DATASET_FIND_ALL:'/list',
     DATA_FIND_BY_NAME : 'get',
+
+    //non fraude 
+    DATASET_BASE_NON_FRAUD :'/non-fraud',
+    DATASET_NON_FRAUD_ADD: '/add:code',
+    DATASET_NON_FRAUD_FIND: '/list'
+
 }

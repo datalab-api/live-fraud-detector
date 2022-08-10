@@ -3,18 +3,16 @@ const mongoose = require('mongoose');
 const Adress = mongoose.model(
     "Adress",
     new mongoose.Schema({
-        adress:{type:String},
-        name: {type:String},
-        region: {type: String },
-        city: {type: String },
-        province: {type: String },
-        gps_cordinates:{type:Array},
-        ref_country: {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"Country"
-        }
-        },
-        {timestamps: true}
+        state: String,
+        name: String,
+        region: String,
+        city: String,
+        prov: String,
+        latt: String,
+        longt: String,
+        address: String
+    },
+        { timestamps: true }
     ).set("toJSON", {
         virtuals: true,
         versionKey: false,

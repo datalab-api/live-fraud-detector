@@ -4,9 +4,13 @@ const { faker } = require('@faker-js/faker');
 var CryptoJS = require("crypto-js");
 const configSecret = require("../config/constantes");
 var request = require('request');
+const path = require('path');
+const fs = require('fs');
 
-
+//joining path of directory 
+const directoryPath = path.join(__dirname, '../../../adresses');
 const dataRandom = require('../config/constantes');
+var JsonDataCountry = require("../../../data_template/CountryCodes.json");
 
 // logger info 
 var log4js = require("log4js");
@@ -14,6 +18,7 @@ var logger = log4js.getLogger();
 logger.level = "debug";
 
 
+// databases 
 const Role = db.role;
 const User = db.user;
 const Dataset = db.dataset;
@@ -21,7 +26,6 @@ const Country = db.country;
 const Adress = db.adress;
 const Product = db.product;
 
-var JsonDataCountry = require("../../../data_template/CountryCodes.json");
 const {
     USERNAME_ADMIN,
     PASSWORD_ADMIN,
@@ -33,7 +37,7 @@ const {
 
 var options = {
     'method': URI_METHOD,
-    'url': 'http://api.3geonames.org/randomland.fr.json',
+    'url': 'http://api.3geonames.org/randomland.FR.json',
     'headers': {
     }
 };
@@ -42,10 +46,8 @@ var options = {
 module.exports = {
     initialyRoles,
     initialyUser,
-    generatorDatasetFR,
     loadCountryCode,
     generatorAdress,
-    generatorAdressFR,
     initProduct
 };
 
@@ -149,109 +151,36 @@ async function loadCountryCode() {
 }
 
 function generatorAdress() {
-    logger.info("+ Load city  Code in MongoDB ... ");
-
-    dataRandom.list_countries.forEach(
-        (item) => {
-
-            // set localize faker            
-            faker.locale = item.faker;
-            //for (let index = 0; index < Number(number); index++) {
-            logger.info(item.code)
-            options.url = `http://api.3geonames.org/randomland.${item.code}.json`;
-            logger.info(options.url);
-            const adress = faker.address.streetAddress(true);
-            setTimeout(function () {
-                request(options, function (error, response) {
-                    if (error) {
-                        throw new Error(error);
-                        process.exit();
-                    }
-                    //logger.info(response.body);        
-                    var randomCountry = JSON.parse(response.body);
-                    if (!randomCountry.nearest.region && !randomCountry.nearest.city && randomCountry.nearest.prov) {
-    
-                        new Adress({
-                            adress: faker.address.streetAddress(true),
-                            name: randomCountry.nearest.name,
-                            region: randomCountry.nearest.region,
-                            city: randomCountry.nearest.city,
-                            province: randomCountry.nearest.prov,
-                            gps_cordinates: { latt: randomCountry.nearest.latt, longt: randomCountry.nearest.longt },
-                            state: randomCountry.nearest.state
-                        }).save((err, product) => {
-                            if (err) {
-                                logger.error(err);
-                            }
-                        });
-                        logger.info(index%10 === 0);   
-                    }
-    
+    Adress.estimatedDocumentCount((err, count) => {
+        if (count === 0 && !err) {
+            logger.info("+ Load city  Code in MongoDB ... ");
+            //passsing directoryPath and callback function
+            fs.readdir(directoryPath, function (err, files) {
+                //handling error
+                if (err) {
+                    logger.error('Unable to scan directory: ' + err);
+                    process.exit();
+                } 
+                //listing all files using forEach
+                files.forEach(function (file) {
+                    // Do whatever you want to do with the file          
+                    var data=fs.readFileSync(path.join(directoryPath, file), 'utf8');
+                    var words=JSON.parse(data);
+                    // logger.info(words);
+                    Adress.insertMany(words).then(function(){
+                        logger.info(`- ${file} : Data  adresses inserted is success`)  // Success
+                    }).catch(function(error){
+                        logger.error(error)      // Failure
+                    });
+        
+                    
                 });
-            },1000);         
+            });         
         }
-    )
+    });    
 }
 
 
-function generatorAdressFR(number) {
-
-    logger.info("+ Load city  Code in MongoDB ... ");
-    Country.findOne({ code: 'FR' }).exec((err, country) => {
-        if (err) {
-            return res.status(500).json({ message: err });
-        }
-
-        if (!country) {
-            return res.status(404).json({ message: ` country account does not exist ` });
-        }
-        //logger.info(country);
-        for (let index = 0; index < Number(number); index++) {
-            //logger.info(index);
-            setTimeout(function () {
-                request(options, function (error, response) {
-                    if (error) {
-                        throw new Error(error);
-                        process.exit();
-                    }
-                    //logger.info(response.body);        
-                    var randomCountry = JSON.parse(response.body);
-                    if (!randomCountry.nearest.region && !randomCountry.nearest.city && randomCountry.nearest.prov) {
-                        logger.info({
-                            adress: faker.address.streetAddress(true),
-                            name: randomCountry.nearest.name,
-                            region: randomCountry.nearest.region,
-                            city: randomCountry.nearest.city,
-                            province: randomCountry.nearest.prov,
-                            gps_cordinates: { latt: randomCountry.nearest.latt, longt: randomCountry.nearest.longt },
-                            state: country._id
-                        });
-                        // new Adress({
-                        //     adress: faker.address.streetAddress(true),
-                        //     name: randomCountry.nearest.name,
-                        //     region: randomCountry.nearest.region,
-                        //     city: randomCountry.nearest.city,
-                        //     province: randomCountry.nearest.prov,
-                        //     gps_cordinates: { latt: randomCountry.nearest.latt, longt: randomCountry.nearest.longt },
-                        //     state: country._id
-                        // }).save((err) => {
-                        //     if (err) {
-                        //         logger.error(err);
-                        //     }
-                        // });
-                    }
-    
-                });
-                if(index%10 === 0){
-                    logger.info(index);   
-                }
-            },1000);
-            
-        }
-
-    });
-
-}
 
 async function initProduct(number) {
     for (let index = 0; index < Number(number); index++) {
@@ -268,61 +197,4 @@ async function initProduct(number) {
     }
 }
 
-async function generatorDatasetFR(number) {
-
-    faker.locale = 'fr';
-
-    Adress.find().sort({ region: 1 }).exec((err, adresses) => {
-
-        adresses.forEach(
-            (index) => {
-
-                const dateRandom = faker.date.between('2010-01-01T00:00:00.000Z', '2020-01-01T00:00:00.000Z');
-                const tmp = dateRandom.toISOString().split('T');
-                const date = tmp[0];
-                const hour = tmp[1].split('.')[0];
-
-                logger.info(product_tmp);
-                new Dataset({
-                    account_id: faker.random.numeric(2),
-                    user_date_creation: date,
-                    user_hour_creation: hour,
-                    payment_date: date,
-                    payment_hour: hour,
-                    adresse_changed_days: faker.random.numeric(2),
-                    browsing_time_seconds: faker.random.numeric(3),
-                    page_visited: faker.random.numeric({ min: 0, max: 3 }),
-                    number_ticket_opened: faker.random.numeric(1),
-                    items: product_tmp,
-                    payment_provider: dataRandom.payment_Provider_80[Math.floor(Math.random() * dataRandom.payment_Provider_80.length)],
-                    card_nationality: dataRandom.card_Nationality_10[Math.floor(Math.random() * dataRandom.card_Nationality_10.length)],
-                    address_country: faker.address.countryCode(),
-                    delivery_address: faker.address.streetAddress(true),
-                    billing_country: faker.address.countryCode(),
-                    billing_address: faker.address.streetAddress(true),
-                    adress: index._id,
-                    email_changed_days: faker.random.numeric({ min: 1, max: 30 }),
-                    email: faker.internet.email(),
-                    dialling_code: faker.address.countryCode(),
-                    delivery_company: dataRandom.delivery_companies[Math.floor(Math.random() * dataRandom.delivery_companies.length)],
-                    delivery_place: dataRandom.delivery_places[Math.floor(Math.random() * dataRandom.delivery_places.length)],
-                    delivery_option: dataRandom.delivery_options[Math.floor(Math.random() * dataRandom.delivery_options.length)],
-                    voucher: faker.datatype.boolean(),
-                    subscription: faker.datatype.boolean(),
-                    total: faker.commerce.price(80, 800),
-                }).save((err, dataset) => {
-                    if (err) {
-                        logger.error(err);
-                        process.exit();
-                    }
-                    logger.info(`+++ Add new product : ${dataset.account_id} `);
-                });
-                new Promise(r => setTimeout(r, 120000));
-            }
-        )
-
-    })
-
-
-}
 
