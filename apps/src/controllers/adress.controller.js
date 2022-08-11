@@ -126,7 +126,7 @@ exports.findAdressByCode = async (req, res) => {
 
 exports.findAllAdress = async (req, res) => {
     
-    Adress.find().populate("ref_country", "-__v")
+    Adress.find().sort({state:1})
         .exec((err, addresses) => {
             if (err) {
                 return res.status(500).json({ message: err });

@@ -19,11 +19,10 @@ const app = express();
 // process .env 
 const PORT = process.env.PORT || 8080;
 const HOSTNAME = process.env.HOST_API;
-//const MONGO_URI = process.env.MONGO_URI_HOST;
-const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@kyndryl-mdb-livefraudde.xzg6f.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
+const MONGO_URI = process.env.MONGO_URI_HOST;
+//const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@kyndryl-mdb-livefraudde.xzg6f.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
 
 const initData = require("./src/services/init.service");
-const generate = require('./src/services/generator-dataset.service');
 const optionsMongose = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -32,14 +31,17 @@ const optionsMongose = {
   serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
   socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 };
+const generator = require('./src/services/dataset.service');
+
 mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   logger.info("MongoDB : Connection established successfully ....");
   initData.initialyRoles();
   new Promise(r => setTimeout(r, 120000));
   initData.initialyUser();
   new Promise(r => setTimeout(r, 120000));
-  // generate.generatorDataBe("de",10);
+  // generate.generatorDataBe("be",10);
   initData.generatorAdress();
+  generator.generate_non_fraud('be',10);
 })
   .catch((err) => {
     logger.error(`MongoDB Connexion Error : ${err}`);

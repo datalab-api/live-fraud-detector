@@ -1,64 +1,151 @@
-foLive Fraud Detector
+For Live Fraud Detector by
 Kyndryl x MongoDB
 ===
+
 Abstract:xxx
-## Papar Information
-- Title:  `paper name`
-- Authors:  `A`,`B`,`C`
-- Preprint: [https://arxiv.org/abs/xx]()
-- Full-preprint: [paper position]()
-- Video: [video position]()
 
 ## Install & Dependence
-- python
-- pytorch
-- numpy
 
-## Dataset Preparation
-| Dataset | Download |
-| ---     | ---   |
-| dataset-A | [download]() |
-| dataset-B | [download]() |
-| dataset-C | [download]() |
+- [nodejs & npm](https://nodejs.org/en/)
+- [mongoDB](https://www.mongodb.com/docs/manual/administration/install-community/)
+- [python](https://www.python.org/downloads/)
 
-## Use
-- for train
+## Use setup
+
+- Clone the repo and install the dependencies.
+
+  ```bash
+  # clone repo
+  git clone https://github.com/datalab-api/live-fraud-detector/issues 
   ```
-  python train.py
+
+  ```bash
+  # you may want to move in directory : live-fraud-detector/apps/
+  cd live-fraud-detector/apps/
   ```
-- for test
+
+   ```bash
+  # install dependancies
+  npm install 
   ```
-  python test.py
+
+- for generate the certificates of your api nodejs
+
+  ```bash
+  # you can exec the file setup.sh
+  bash setup.sh
   ```
-## Pretrained model
+
+- Start your app
+
+  ```bash
+  npm start  
+  ```
+
+## Model schema
+
 | Model | Download |
 | ---     | ---   |
 | Model-1 | [download]() |
 | Model-2 | [download]() |
 | Model-3 | [download]() |
 
-
 ## Directory Hierarchy
 ```
-|—— data_template.json
+|—— .github
+|    |—— workflows
+|        |—— nodejs.yml
+|—— .gitignore
+|—— apps
+|    |—— .env
+|    |—— .env.local
+|    |—— certs
+|        |—— admin-temp.key
+|        |—— admin.csr
+|        |—— admin.key
+|        |—— admin.pem
+|        |—— ca.key
+|        |—— ca.pem
+|    |—— package-lock.json
+|    |—— package.json
+|    |—— README.md
+|    |—— server.js
+|    |—— setup.sh
+|    |—— src
+|        |—— config
+|            |—— constantes.js
+|            |—— endpoint.config.js
+|            |—— non-fraud.constantes.js
+|        |—— controllers
+|            |—— adress.controller.js
+|            |—— auth.controller.js
+|            |—— country.controller.js
+|            |—— dataset-non-fraud.controller.js
+|            |—— dataset.controller.js
+|            |—— product.controller.js
+|            |—— user.controller.js
+|        |—— middlewares
+|            |—— authJwt.js
+|            |—— index.js
+|            |—— verifySignUp.js
+|        |—— models
+|            |—— adress.model.js
+|            |—— country-code.model.js
+|            |—— dataset.model.js
+|            |—— index.js
+|            |—— product.model.js
+|            |—— role.model.js
+|            |—— user.model.js
+|        |—— routes
+|            |—— adress.route.js
+|            |—— auth.routes.js
+|            |—— dataset.route.js
+|            |—— user.routes.js
+|        |—— services
+|            |—— dataset.service.js
+|            |—— init.service.js
+|            |—— signature.service.js
+|        |—— swagger.json
+|—— data_template
+|    |—— archi-traitment.drawio
+|    |—— CountryCodes.json
+|    |—— data_dictionnary_fraud.txt
+|    |—— data_dictionnary_fraud2.txt
+|    |—— data_dictionnary_nonfraud.txt
+|    |—— data_template.json
+|—— load.py
+|—— main.py
+|—— mongo.py
+|—— README.md
+
 ```
+
 ## Code Details
+
 ### Tested Platform
+
 - software
+
   ```
   OS: Debian unstable (May 2021), Ubuntu LTS
   Python: 3.8.5 (anaconda)
   PyTorch: 1.7.1, 1.8.1
   ```
+
 - hardware
+
   ```
   CPU: Intel Xeon 6226R
   GPU: Nvidia RTX3090 (24GB)
   ```
+
 ### Hyper parameters
+
 ```
 ```
+
 ## References
+
 - [paper-1]()
 - [paper-2]()
 - [code-1](https://github.com)
@@ -67,6 +154,5 @@ Abstract:xxx
 ## License
 
 ## Citing
+
 If you use xxx,please use the following BibTeX entry.
-```
-```

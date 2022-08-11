@@ -9,10 +9,8 @@ const Dataset = mongoose.model(
     "Dataset",
     new mongoose.Schema({
         account_id: { type: Number, default: () => counter++ },
-        user_date_creation: { type: Date },
-        user_hour_creation: { type: String },
-        payment_date: { type: Date },
-        payment_hour: { type: String },
+        user_date_creation: { type: String },
+        payment_date: { type: String },
         adresse_changed_days: { type: Number },
         browsing_time_seconds: { type: Number },
         page_visited: { type: Number },
@@ -31,7 +29,7 @@ const Dataset = mongoose.model(
         delivery_option: { type: String },
         voucher: { type: Boolean, default: false },
         subscription: { type: Boolean, default: false },
-        total: { type: mongoose.Types.Decimal128, min: 80, max: 800 }
+        total: { type: String}
     },
         { timestamps: true }
     ).set("toJSON", {

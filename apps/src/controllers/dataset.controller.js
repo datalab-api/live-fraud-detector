@@ -21,7 +21,7 @@ exports.findDatasetByName = async (req, res) => {
 
 exports.findAllDataset = async (req, res) => {
 
-    Dataset.find().populate("adress", "-__v")
+    Dataset.find().sort({account_id:1})
         .exec((err, datasets) => {
             if (err) {
                 return res.status(500).json({ message: err });

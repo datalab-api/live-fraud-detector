@@ -9,7 +9,7 @@ var log4js = require("log4js");
 var logger = log4js.getLogger();
 logger.level = "debug";
 
-const generate = require('../services/generator-dataset.service');
+const generate = require('../services/dataset.service');
 const { json, response } = require("express");
 
 exports.createDatasetNonFraud = async (req, res) => {
@@ -19,13 +19,9 @@ exports.createDatasetNonFraud = async (req, res) => {
     if (!req.query.number) {
         return res.status(400).json({ message: 'code country not found' });
     }
-    response = generate.generatorDataBe (req.params.code,req.query.number)
-    response = JSON.parse(response);
-
-    if(response.code !== 201){
-        res.status(400).json(response);
-    }
-    res.status(200).json(response);
+    generate.generate_non_fraud (req.params.code,req.query.number);
+   
+    res.status(200).json('ok');
 }
 
 exports.findAllDataset = async (req, res) => {

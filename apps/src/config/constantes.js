@@ -1,7 +1,10 @@
+const fs = require('fs');
+const path = require('path');
+const cert = path.join(__dirname, '../../certs/admin-temp.key');
 module.exports = {
-    secret: require('crypto').randomBytes(64).toString('hex'),
-    jwtExpiration: 86400,           // 24 hour
-    jwtRefreshExpiration: '7d',   // 7 days
+    secret: fs.readFileSync(cert),
+    jwtExpiration: 1800,           // 24 hour
+    jwtRefreshExpiration: '1h',   // 7 days
     Payment_Provider_20: [
         "Caisse Epargne",
         "Credit Agricole",
