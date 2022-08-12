@@ -1,6 +1,6 @@
 In this scenario, we supposed that the credit card was stolen:
 
-Account_ID: [0, 100 000] (the idea is to have multiple orders from the same person)
+Account_ID: [0, 80 000] (the idea is to have multiple orders from the same person)
 
 User_Date_Creation: Same as Payment_Date
 
@@ -10,7 +10,7 @@ Payment_Date: Same as User_Date_Creation or User_Date_Creation + 1 day
 
 Payment_Hour: few minutes/hours after Payment_Hour (xx:xx:xx)
 
-Address_Changed_Days: random number [0;today-User_Date_Creation]
+Address_Changed_Days: Payment_Date-User_Date_Creation
 
 Browsing_Time_Seconds: random number in seconds [10;200]
 
@@ -24,11 +24,11 @@ Item: A client can order [1;7] items
 
 Payment_Provider: 
 [Caisse Epargne, Credit Agricole, BNP, LCL, La Poste, Societe Generale, BRED, Banque Populaire, HSBC, Banque Populaire, Credit Mutuel] Odds 20%
-[N26, Boursorama, ING, Fortuneo, Amazon Pay, Apple Pay, Atos, Authorize.Net, Ingenico, Klarna, Paypal, Stripe, Trustly, Revolut] Odds 80%
+[N26, Boursorama, ING, Fortuneo, Amazon Pay, Apple Pay, WorldLine, Authorize.Net, Ingenico, Klarna, Paypal, Stripe, Trustly, Revolut] Odds 80%
 
 Card_Nationality: 
-[BE, EL, LT, PT, BG, UK, ES, LU, RO, CZ, FR, HU, SI, DK, HR, MT, SK, DE, IT, NL, FI, EE, CY, AT, SE , IE, LV, PL, NO, CH, LI, IS]; Odds 30%
-[AL, ME, RS, MK, TR, BA, XK, AM, BY, GE, AZ, MD, UA]; Odds 40%
+[BE, LT, PT, BG, UK, ES, LU, RO, CZ, FR, HU, SI, DK, HR, MT, SK, DE, IT, NL, FI, EE, CY, AT, SE , IE, LV, PL, NO, CH, LI, IS]; Odds 30%
+[AL, ME, RS, MK, TR, BA, AM, BY, GE, AZ, MD, UA]; Odds 40%
 [DZ, LB, SY, EG, LY, TN, IL, MA, JO, PS]; Odds 20%
 [RU] Odds 10%
 
@@ -46,7 +46,7 @@ ZIP: Delivery_Address's ZIP  - https://randommer.io/random-address
 
 Province: Delivery_Address's Province - https://randommer.io/random-address
 
-Email_Changed_Days: random number [0;today-User_Date_Creation]: 
+Email_Changed_Days: Payment_Date-User_Date_Creation
 
 Dialling_Code: Dialling_Country code of the phone number. Use CountryCode.json to map the country with it's dialling code
 
