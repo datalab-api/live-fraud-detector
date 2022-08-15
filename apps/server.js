@@ -27,9 +27,9 @@ const optionsMongose = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   autoIndex: true, // Don"t build indexes
-  maxPoolSize: 10, // Maintain up to 10 socket connections
-  serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-  socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+  maxPoolSize: 50, // Maintain up to 10 socket connections
+  //serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+  //socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 };
 const generator = require('./src/services/dataset.service');
 
@@ -41,7 +41,7 @@ mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   new Promise(r => setTimeout(r, 120000));
   // generate.generatorDataBe("be",10);
   initData.generatorAdress();
-  generator.generate_non_fraud('be',10);
+  generator.generate_non_fraud(5);
 })
   .catch((err) => {
     logger.error(`MongoDB Connexion Error : ${err}`);

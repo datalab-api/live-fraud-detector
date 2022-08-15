@@ -8,7 +8,7 @@ let CountedId = { type: Number, default: () => counter++ };
 const Dataset = mongoose.model(
     "Dataset",
     new mongoose.Schema({
-        account_id: { type: Number, default: () => counter++ },
+        account_id: { type: Number},
         user_date_creation: { type: String },
         payment_date: { type: String },
         adresse_changed_days: { type: Number },
@@ -18,7 +18,6 @@ const Dataset = mongoose.model(
         items: { type: Array },
         payment_provider: { type: String },
         card_nationality: { type: String },
-        address_country: { type: String },
         delivery_address: { type: Object },
         billing_country: { type: String },
         billing_address: { type: Object },
@@ -33,6 +32,8 @@ const Dataset = mongoose.model(
     },
         { timestamps: true }
     ).set("toJSON", {
+        getters: true,
+        minimize: false,
         virtuals: true,
         versionKey: false,
         transform: function (doc, ret) {

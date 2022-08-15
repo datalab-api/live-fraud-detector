@@ -5,7 +5,7 @@ module.exports = {
     secret: fs.readFileSync(cert),
     jwtExpiration: 1800,           // 24 hour
     jwtRefreshExpiration: '1h',   // 7 days
-    Payment_Provider_20: [
+    payment_provider1: [
         "Caisse Epargne",
         "Credit Agricole",
         "BNP",
@@ -18,7 +18,7 @@ module.exports = {
         "Banque Populaire",
         "Credit Mutuel"
     ],
-    payment_Provider_80: [
+    payment_provider2: [
         "N26",
         "Boursorama",
         "ING",
@@ -34,16 +34,16 @@ module.exports = {
         "Trustly",
         "Revolut"
     ],
-    card_Nationality_30: [
-        "BE", "EL", "LT", "PT", "BG", "UK", "ES", "LU", "RO", "CZ", "FR", "HU", "SI", "DK", "HR", "MT", "SK", "DE", "IT", "NL", "FI", "EE", "CY", "AT", "SE", "IE", "LV", "PL", "NO", "CH", "LI", "IS"
+    card_nationality1: [
+        "BE", "LT", "PT", "BG", "UK", "ES", "LU", "RO", "CZ", "FR", "HU", "SI", "DK", "HR", "MT", "SK", "DE", "IT", "NL", "FI", "EE", "CY", "AT", "SE", "IE", "LV", "PL", "NO", "CH", "LI", "IS"
     ],
-    card_Nationality_40: [
-        "AL", "ME", "RS", "MK", "TR", "BA", "XK", "AM", "BY", "GE", "AZ", "MD", "UA"
+    card_nationality2: [
+        "AL", "ME", "RS", "MK", "TR", "BA", "AM", "BY", "GE", "AZ", "MD", "UA"
     ],
-    card_Nationality_20: [
+    card_nationality3: [
         "DZ", "LB", "SY", "EG", "LY", "TN", "IL", "MA", "JO", "PS"
     ],
-    card_Nationality_10: ["RU"],
+    card_nationality4: ["RU"],
     delivery_options: ["Standard", "Priority", "Express"],
     delivery_places: ["collection_point", "home", "shop"],
     delivery_companies: [

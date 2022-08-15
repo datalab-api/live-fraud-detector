@@ -16,7 +16,7 @@ Abstract:xxx
 
   ```bash
   # clone repo
-  git clone https://github.com/datalab-api/live-fraud-detector/issues 
+  git clone https://github.com/datalab-api/live-fraud-detector.git 
   ```
 
   ```bash
