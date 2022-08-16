@@ -31,7 +31,7 @@ const optionsMongose = {
   //serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
   //socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 };
-const generator = require('./src/services/dataset.service');
+const generator = require('./src/services/dataset-non-fraud.service');
 
 mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   logger.info("MongoDB : Connection established successfully ....");

@@ -10,10 +10,11 @@ logger.level = "debug";
 const Dataset = db.dataset;
 const Adress = db.adress;
 
-const { adress } = require('../models/index');
+module.exports = {
+    generate_non_fraud
+};
 
-
-module.exports = function generate_non_fraud(number) {
+function generate_non_fraud(number) {
     // const tmp = random_data.list_countries.find(item=> item.code === String(localize).toUpperCase());
     // faker.locale = tmp.faker;
 

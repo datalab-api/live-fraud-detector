@@ -9,15 +9,14 @@ var log4js = require("log4js");
 var logger = log4js.getLogger();
 logger.level = "debug";
 
-const generate = require('../services/dataset.service');
-const { json, response } = require("express");
+const generate = require('../services/dataset-non-fraud.service');
 
 exports.createDatasetNonFraud = async (req, res) => {
 
     if (!req.query.number) {
         return res.status(400).json({ message: 'code country not found' });
     }
-    generate.generate_non_fraud (req.query.number);
+    generate.generate_non_fraud(req.query.number);
    
     res.status(200).json({code : 201, message : ` dataset non fraud added is ok`});
 }
