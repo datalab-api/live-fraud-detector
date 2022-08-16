@@ -13,15 +13,13 @@ const generate = require('../services/dataset.service');
 const { json, response } = require("express");
 
 exports.createDatasetNonFraud = async (req, res) => {
-    if (!req.params.code) {
-        return res.status(400).json({ message: 'code country not found' });
-    }
+
     if (!req.query.number) {
         return res.status(400).json({ message: 'code country not found' });
     }
-    generate.generate_non_fraud (req.params.code,req.query.number);
+    generate.generate_non_fraud (req.query.number);
    
-    res.status(200).json('ok');
+    res.status(200).json({code : 201, message : ` dataset non fraud added is ok`});
 }
 
 exports.findAllDataset = async (req, res) => {

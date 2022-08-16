@@ -43,7 +43,7 @@ module.exports = {
     card_nationality3: [
         "DZ", "LB", "SY", "EG", "LY", "TN", "IL", "MA", "JO", "PS"
     ],
-    card_nationality4: ["RU"],
+    card_nationality4: "RU",
     delivery_options: ["Standard", "Priority", "Express"],
     delivery_places: ["collection_point", "home", "shop"],
     delivery_companies: [

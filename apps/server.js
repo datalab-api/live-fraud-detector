@@ -41,7 +41,7 @@ mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   new Promise(r => setTimeout(r, 120000));
   // generate.generatorDataBe("be",10);
   initData.generatorAdress();
-  generator.generate_non_fraud(5);
+  generator.generate_non_fraud(50);
 })
   .catch((err) => {
     logger.error(`MongoDB Connexion Error : ${err}`);
