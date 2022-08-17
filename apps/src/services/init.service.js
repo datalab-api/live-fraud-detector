@@ -1,16 +1,14 @@
-const db = require("../models/index");
 var bcrypt = require("bcryptjs");
 const { faker } = require('@faker-js/faker');
 var CryptoJS = require("crypto-js");
-const configSecret = require("../config/constantes");
 var request = require('request');
 const path = require('path');
 const fs = require('fs');
 
 //joining path of directory 
 const directoryPath = path.join(__dirname, '../../../adresses');
-const dataRandom = require('../config/constantes');
 var JsonDataCountry = require("../../../data_template/CountryCodes.json");
+const random_data = require('../config/constantes');
 
 // logger info 
 var log4js = require("log4js");
@@ -19,6 +17,7 @@ logger.level = "debug";
 
 
 // databases 
+const db = require("../models/index");
 const Role = db.role;
 const User = db.user;
 const Dataset = db.dataset;
@@ -49,7 +48,10 @@ module.exports = {
     loadCountryCode,
     generatorAdress,
     initProduct,
-    generateProduct
+    generateProduct,
+    initNonFraud,
+    initFraud,
+    initFraud2
 };
 
 function initialyRoles() {
@@ -134,16 +136,12 @@ async function loadCountryCode() {
     Country.estimatedDocumentCount((error, count) => {
         if (count === 0 && !error) {
             logger.info("+ Load Coutry Code in MongoDB ... ");
-            JsonDataCountry.forEach(
-                (element) => {
-                    new Country(element).save((err) => {
-                        if (err) {
-                            logger.error(err);
-                        }
-                        logger.info(`+++ Added ${element.dial_code} ${element.name} to country collection`);
-                    })
-                }
-            );
+            Country.insertMany(JsonDataCountry).then(function () {
+                logger.info(`+++ Added  to country collection`);
+            }).catch(function (error) {
+                logger.error(error)      // Failure
+            });
+           
         } else {
             logger.info("Data Country is  existe  .....");
         }
@@ -207,4 +205,161 @@ async function initProduct(number) {
     }
 }
 
+async function initNonFraud(){
+     // const tmp = random_data.list_countries.find(item=> item.code === String(localize).toUpperCase());
+    // faker.locale = tmp.faker;
+    Adress.find().sort({ state: 1 })
+        .exec((err, addresses) => {
+            if (err) {
+                logger.error({ message: err });
+            }
 
+            if (!addresses) {
+                logger.error({ message: "Adresse Not found." });
+            } else {
+                var datasets = [];
+                addresses.forEach(item => {
+                    const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                    //const date_payment = faker.date.soon(365, date_create);
+                    const date_payment = faker.date.between(date_create, Date.now());
+                    const diffTime = Math.abs(date_payment - date_create);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    datasets.push({
+                        account_id: Math.floor(Math.random() * 80000) + 1,
+                        user_date_creation: date_create.toISOString(),
+                        payment_date: date_payment.toISOString(),
+                        addresse_changed_days: diffDays,
+                        browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
+                        page_visited: Math.floor(Math.random() * 50) + 1,
+                        number_ticket_opened: Math.floor(Math.random() * 10),
+                        number_previous_orders: Math.floor(Math.random() * 20),
+                        items: product.generateProduct(),
+                        payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
+                        card_nationality: item.state,
+                        delivery_address: item,
+                        billing_country: item.state,
+                        billing_address: item.address,
+                        email_changed_days: Number(diffDays),
+                        email: faker.internet.email(),
+                        delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                        delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
+                        delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                        voucher: faker.datatype.boolean(),
+                        subscription: faker.datatype.boolean(),
+                        total: faker.commerce.price(5, 10000),
+                        type: 'non-fraud',
+                    });
+
+                });
+                Dataset.insertMany(datasets).then(function () {
+                    logger.info(`- Dataset non fraud generate is success`);  // Success
+                }).catch(function (error) {
+                    logger.error(error)      // Failure
+                });
+            }
+        });
+}
+
+async function initFraud(){
+    Adress.find().sort({ state: 1 })
+        .exec((err, addresses) => {
+            if (err) {
+                logger.error({ message: err });
+            }
+
+            if (!addresses) {
+                logger.error({ message: "Adresse Not found." });
+            } else {
+                var datasets = [];
+                addresses.forEach(item => {
+                    const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                    //const date_payment = faker.date.soon(365, date_create);
+                    const date_payment = faker.date.between(date_create, Date.now());                    
+                   
+                    datasets.push({
+                        account_id: Math.floor(Math.random() * 80000) + 1,
+                        user_date_creation: date_create.toISOString(),
+                        payment_date: date_payment.toISOString(),
+                        addresse_changed_days: 0,
+                        browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
+                        page_visited: Math.floor(Math.random() * 50) + 1,
+                        number_ticket_opened: Math.floor(Math.random() * 10),
+                        number_previous_orders:  Math.floor(Math.random() * 2),
+                        items: generateProduct(),
+                        payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
+                        card_nationality: item.state,
+                        delivery_address: item,
+                        billing_country: item.state,
+                        billing_address: item.address,
+                        email_changed_days: 0,
+                        email: faker.internet.email(),
+                        delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                        delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
+                        delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                        voucher: false,
+                        subscription: false,
+                        total: faker.commerce.price(5, 10000),
+                        type: 'fraud',
+                    });
+
+                });
+                Dataset.insertMany(datasets).then(function () {
+                    logger.info(`- Dataset generate is success`);  // Success
+                }).catch(function (error) {
+                    logger.error(error)      // Failure
+                });
+            }
+        });
+}
+
+async function initFraud2(){
+    Adress.find().sort({ state: 1 })
+        .exec((err, addresses) => {
+            if (err) {
+                logger.error({ message: err });
+            }
+
+            if (!addresses) {
+                logger.error({ message: "Adresse Not found." });
+            } else {
+                var datasets = [];
+                addresses.forEach(item => {
+                    const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                    const date_payment = faker.date.between(date_create, Date.now());
+                   
+                    datasets.push({
+                        account_id: Math.floor(Math.random() * 80000) + 1,
+                        user_date_creation: date_create.toISOString(),
+                        payment_date: date_payment.toISOString(),
+                        addresse_changed_days: 0,
+                        browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
+                        page_visited: Math.floor(Math.random() * 50) + 1,
+                        number_ticket_opened: Math.floor(Math.random() * 10),
+                        number_previous_orders: Math.floor(Math.random() * 20),
+                        items: product.generateProduct(),
+                        payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
+                        card_nationality: item.state,
+                        delivery_address: item,
+                        billing_country: item.state,
+                        billing_address: item.address,
+                        email_changed_days: 0,
+                        email: faker.internet.email(),
+                        delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                        delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
+                        delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                        voucher: faker.datatype.boolean(),
+                        subscription: faker.datatype.boolean(),
+                        total: faker.commerce.price(80, 300),
+                        type: 'fraud2',
+                    });
+
+                });
+                Dataset.insertMany(datasets).then(function () {
+                    logger.info(`- Dataset generate is successfully`);  // Success
+                }).catch(function (error) {
+                    logger.error(error)      // Failure
+                });
+            }
+        });
+}

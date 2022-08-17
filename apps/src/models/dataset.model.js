@@ -42,7 +42,8 @@ const Dataset = mongoose.model(
         transform: function (doc, ret) {
             delete ret._id;
             delete ret.createdAt;
-            delete type;
+            delete ret.type;
+            delete ret.updatedAt;            
         },
     })
 );

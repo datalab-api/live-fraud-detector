@@ -29,11 +29,8 @@ const optionsMongose = {
   autoIndex: true, // Don"t build indexes
   maxPoolSize: 50, // Maintain up to 10 socket connections
   //serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-  //socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+  socketTimeoutMS: 60000, // Close sockets after 45 seconds of inactivity
 };
-const generator = require('./src/services/dataset-non-fraud.service');
-const generate_f = require('./src/services/dataset-fraud.service');
-const generate_f2 = require('./src/services/dataset-fraud2.service');
 
 
 mongoose.connect(MONGO_URI, optionsMongose).then(() => {
@@ -42,14 +39,18 @@ mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   new Promise(r => setTimeout(r, 120000));
   initData.initialyUser();
   new Promise(r => setTimeout(r, 120000));
-  // generate.generatorDataBe("be",10);
   initData.generatorAdress();
-  setTimeout(() => {
-    //generator.generate_non_fraud(50);
-    generate_f.generate_fraud(50);
-    //generate_f2.generate_fraud2(50);
-    // expected output: seconds elapsed = 2
-  }, 10000);
+  // setTimeout(() => {
+  //   initData.initFraud();
+  // }, 10000);
+
+  // setTimeout(() => {
+  //   initData.initFraud();
+  // }, 10000);
+  
+  // setTimeout(() => {
+  //   initData.initFraud2();
+  // }, 10000);
   
 })
   .catch((err) => {

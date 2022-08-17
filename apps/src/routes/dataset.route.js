@@ -2,7 +2,6 @@ const { authJwt, verifySignUp} = require('../middlewares');
 const BaseUrl = require('../config/endpoint.config');
 
 const controller = require("../controllers/dataset.controller");
-const nonfraudeController =require('../controllers/dataset-non-fraud.controller');
 
 
 module.exports = function(app) {
@@ -13,14 +12,7 @@ module.exports = function(app) {
         );
         next();
       });
-    app.post(
-        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_CREATE,
-        [
-            authJwt.verifyToken,
-            authJwt.isAdmin
-        ],
-        controller.createDataset
-    );
+   
     // find all dataset
     app.get(
         BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_FIND_ALL,
@@ -28,11 +20,11 @@ module.exports = function(app) {
         controller.findAllDataset
     );
 
-    // find dataset by name
+    // find dataset by type
     app.get(
-        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATA_FIND_BY_NAME,
+        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_FIND_BY_TYPE,
         [authJwt.verifyToken],
-        controller.findDatasetByName
+        controller.findAllDatasetByType
     );
 
     // create  dataset non fraud 
@@ -42,18 +34,8 @@ module.exports = function(app) {
             authJwt.verifyToken,
             authJwt.isAdmin
         ],
-        nonfraudeController.createDatasetNonFraud
-    );
-
-    // find all dataset non fraud 
-    app.get(
-        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_BASE_NON_FRAUD + BaseUrl.DATASET_NON_FRAUD_LIST,
-        [
-            authJwt.verifyToken,
-            authJwt.isAdmin
-        ],
-        nonfraudeController.createDatasetNonFraud
-    );
+        controller.createDatasetNonFraud
+    );   
 
     // create  dataset  fraud 
     app.post(
@@ -62,19 +44,8 @@ module.exports = function(app) {
             authJwt.verifyToken,
             authJwt.isAdmin
         ],
-        nonfraudeController.createDatasetNonFraud
-    );
-
-    // find all dataset  fraud 
-    app.get(
-        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_BASE_FRAUD + BaseUrl.DATASET_FRAUD_LIST,
-        [
-            authJwt.verifyToken,
-            authJwt.isAdmin
-        ],
-        nonfraudeController.createDatasetNonFraud
-    );
-
+        controller.createDatasetFraud
+    );  
 
     // create  dataset  fraud2
     app.post(
@@ -83,16 +54,8 @@ module.exports = function(app) {
             authJwt.verifyToken,
             authJwt.isAdmin
         ],
-        nonfraudeController.createDatasetNonFraud
+        controller.createDatasetFraud2
     );
 
-    // find all dataset  fraud2
-    app.get(
-        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_BASE_FRAUD2 + BaseUrl.DATASET_FRAUD2_LIST,
-        [
-            authJwt.verifyToken,
-            authJwt.isAdmin
-        ],
-        nonfraudeController.createDatasetNonFraud
-    );
+    
 };

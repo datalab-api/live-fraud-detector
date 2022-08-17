@@ -16,17 +16,28 @@ const catchError = (err, res) => {
     }
 }
 verifyToken = (req, res, next) => {
-    var token = req.headers["authorization"].split(' ')[1];
-    if (!token) {
-        return res.status(403).json({ message: `Access impossible: No token provided ` });
-    }
-    jwt.verify(token, config.secret, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ message: err });
+
+    try {
+        if( req.headers["authorization"].split(' ')[1]){
+            var token = req.headers["authorization"].split(' ')[1];
+            if (!token) {
+                return res.status(403).json({ message: `Access impossible: No token provided ` });
+            }
+            jwt.verify(token, config.secret, (err, decoded) => {
+                if (err) {
+                    return res.status(401).json({ message: err });
+                }
+                req.userId = decoded.id;
+                next();
+            });
+        }else {
+            return res.status(404).json({ message: ` token not found ` });
         }
-        req.userId = decoded.id;
-        next();
-    });
+       
+    } catch (error) {
+        return res.status(404).json(error)
+    }    
+    
 };
 verifyAuth = (req, res, next) => {
     if (req.headers["Bearer"]) {
