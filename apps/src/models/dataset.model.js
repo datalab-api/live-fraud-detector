@@ -1,5 +1,6 @@
 const { truncate } = require('fs/promises');
 const mongoose = require('mongoose');
+const { type } = require('os');
 
 let counter = 1;
 let CountedId = { type: Number, default: () => counter++ };
@@ -8,13 +9,14 @@ let CountedId = { type: Number, default: () => counter++ };
 const Dataset = mongoose.model(
     "Dataset",
     new mongoose.Schema({
-        account_id: { type: Number},
+        account_id: { type: Number, min:0, max:80000},
         user_date_creation: { type: String },
         payment_date: { type: String },
         addresse_changed_days: { type: Number },
-        browsing_time_seconds: { type: Number },
+        browsing_time_seconds: { type: Number, min : 10, max: 3600 },
         page_visited: { type: Number },
         number_ticket_opened: { type: Number },
+        number_previous_orders : { type: Number },
         items: { type: Array },
         payment_provider: { type: String },
         card_nationality: { type: String },
@@ -22,6 +24,7 @@ const Dataset = mongoose.model(
         billing_country: { type: String },
         billing_address: { type: Object },
         email: { type: String },
+        type: { type: String },
         email_changed_days: { type: Number },
         delivery_company: { type: String },
         delivery_place: { type: String },
@@ -39,6 +42,7 @@ const Dataset = mongoose.model(
         transform: function (doc, ret) {
             delete ret._id;
             delete ret.createdAt;
+            delete type;
         },
     })
 );

@@ -26,9 +26,18 @@ module.exports = {
     DATASET_FIND_ALL:'/list',
     DATA_FIND_BY_NAME : 'get',
 
-    //non fraude 
+    //non fraud 
     DATASET_BASE_NON_FRAUD :'/non-fraud',
-    DATASET_NON_FRAUD_ADD: '/add/:code',
-    DATASET_NON_FRAUD_FIND: '/list'
+    DATASET_NON_FRAUD_ADD: '/add',
+    DATASET_NON_FRAUD_LIST: '/list',
+    // fraud
+    DATASET_BASE_FRAUD :'/fraud',
+    DATASET_FRAUD_ADD: '/add',
+    DATASET_FRAUD_LIST: '/list',
+
+    // fraud2 
+    DATASET_BASE_FRAUD2 :'/fraud2',
+    DATASET_FRAUD2_ADD: '/add',
+    DATASET_FRAUD2_LIST: '/list'
 
 }

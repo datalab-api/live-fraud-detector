@@ -47,7 +47,48 @@ module.exports = function(app) {
 
     // find all dataset non fraud 
     app.get(
-        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_BASE_NON_FRAUD + BaseUrl.DATASET_NON_FRAUD_FIND,
+        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_BASE_NON_FRAUD + BaseUrl.DATASET_NON_FRAUD_LIST,
+        [
+            authJwt.verifyToken,
+            authJwt.isAdmin
+        ],
+        nonfraudeController.createDatasetNonFraud
+    );
+
+    // create  dataset  fraud 
+    app.post(
+        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_BASE_FRAUD + BaseUrl.DATASET_FRAUD_ADD,
+        [
+            authJwt.verifyToken,
+            authJwt.isAdmin
+        ],
+        nonfraudeController.createDatasetNonFraud
+    );
+
+    // find all dataset  fraud 
+    app.get(
+        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_BASE_FRAUD + BaseUrl.DATASET_FRAUD_LIST,
+        [
+            authJwt.verifyToken,
+            authJwt.isAdmin
+        ],
+        nonfraudeController.createDatasetNonFraud
+    );
+
+
+    // create  dataset  fraud2
+    app.post(
+        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_BASE_FRAUD2 + BaseUrl.DATASET_FRAUD2_ADD,
+        [
+            authJwt.verifyToken,
+            authJwt.isAdmin
+        ],
+        nonfraudeController.createDatasetNonFraud
+    );
+
+    // find all dataset  fraud2
+    app.get(
+        BaseUrl.endpoint+BaseUrl.version+ BaseUrl.DATASET_BASE + BaseUrl.DATASET_BASE_FRAUD2 + BaseUrl.DATASET_FRAUD2_LIST,
         [
             authJwt.verifyToken,
             authJwt.isAdmin

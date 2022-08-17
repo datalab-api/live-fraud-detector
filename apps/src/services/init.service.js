@@ -48,7 +48,8 @@ module.exports = {
     initialyUser,
     loadCountryCode,
     generatorAdress,
-    initProduct
+    initProduct,
+    generateProduct
 };
 
 function initialyRoles() {
@@ -180,7 +181,16 @@ function generatorAdress() {
     });    
 }
 
-
+function generateProduct(){
+    var products = [];
+    for (let i = 0; i < Math.floor(Math.random() * 7) + 1; i++) {
+        products.push({
+            name: faker.commerce.productName(),
+            quantity: Math.floor(Math.random() * 10)
+        });
+    }
+    return products;
+}
 
 async function initProduct(number) {
     for (let index = 0; index < Number(number); index++) {

@@ -32,6 +32,9 @@ const optionsMongose = {
   //socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 };
 const generator = require('./src/services/dataset-non-fraud.service');
+const generate_f = require('./src/services/dataset-fraud.service');
+const generate_f2 = require('./src/services/dataset-fraud2.service');
+
 
 mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   logger.info("MongoDB : Connection established successfully ....");
@@ -41,7 +44,13 @@ mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   new Promise(r => setTimeout(r, 120000));
   // generate.generatorDataBe("be",10);
   initData.generatorAdress();
-  generator.generate_non_fraud(50);
+  setTimeout(() => {
+    //generator.generate_non_fraud(50);
+    generate_f.generate_fraud(50);
+    //generate_f2.generate_fraud2(50);
+    // expected output: seconds elapsed = 2
+  }, 10000);
+  
 })
   .catch((err) => {
     logger.error(`MongoDB Connexion Error : ${err}`);

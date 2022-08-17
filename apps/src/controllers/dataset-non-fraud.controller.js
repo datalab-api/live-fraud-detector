@@ -1,7 +1,6 @@
 const config = require("../config/constantes");
 var bcrypt = require("bcryptjs");
 const db = require("../models");
-const Country = db.country;
 const Dataset = db.dataset;
 
 // logger info 
@@ -23,7 +22,7 @@ exports.createDatasetNonFraud = async (req, res) => {
 
 exports.findAllDataset = async (req, res) => {
 
-    Dataset.find().sort({account_id:1})
+    Dataset.find({type: 'non-fraud'}).sort({account_id:1})
         .exec((err, datasets) => {
             if (err) {
                 return res.status(500).json({ message: err });
