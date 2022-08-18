@@ -32,7 +32,7 @@ const optionsMongose = {
   socketTimeoutMS: 60000, // Close sockets after 45 seconds of inactivity
 };
 
-
+// mongo connect
 mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   logger.info("MongoDB : Connection established successfully ....");
   initData.initialyRoles();
@@ -42,16 +42,7 @@ mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   initData.generatorAdress();
   // setTimeout(() => {
   //   initData.initFraud();
-  // }, 10000);
-
-  // setTimeout(() => {
-  //   initData.initFraud();
-  // }, 10000);
-  
-  // setTimeout(() => {
-  //   initData.initFraud2();
-  // }, 10000);
-  
+  // }, 10000);  
 })
   .catch((err) => {
     logger.error(`MongoDB Connexion Error : ${err}`);
