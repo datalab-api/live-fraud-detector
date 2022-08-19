@@ -98,7 +98,7 @@ exports.createDatasetNonFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                addresse_changed_days: diffDays,
+                                addresse_changed_days: Number(diffDays),
                                 browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
                                 page_visited: Math.floor(Math.random() * 50) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
@@ -129,7 +129,7 @@ exports.createDatasetNonFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                adresse_changed_days: diffDays,
+                                adresse_changed_days: Number(diffDays),
                                 browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
                                 page_visited: Math.floor(Math.random() * 50) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
@@ -189,7 +189,7 @@ exports.createDatasetNonFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                addresse_changed_days: diffDays,
+                                addresse_changed_days: Number(diffDays),
                                 browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
                                 page_visited: Math.floor(Math.random() * 50) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
@@ -220,7 +220,7 @@ exports.createDatasetNonFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                adresse_changed_days: diffDays,
+                                adresse_changed_days: Number(diffDays),
                                 browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
                                 page_visited: Math.floor(Math.random() * 50) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
@@ -282,7 +282,7 @@ exports.createDatasetNonFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                addresse_changed_days: diffDays,
+                                addresse_changed_days: Number(diffDays),
                                 browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
                                 page_visited: Math.floor(Math.random() * 50) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
@@ -313,7 +313,7 @@ exports.createDatasetNonFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                adresse_changed_days: diffDays,
+                                adresse_changed_days: Number(diffDays),
                                 browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
                                 page_visited: Math.floor(Math.random() * 50) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
@@ -372,7 +372,7 @@ exports.createDatasetNonFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                addresse_changed_days: diffDays,
+                                addresse_changed_days: Number(diffDays),
                                 browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
                                 page_visited: Math.floor(Math.random() * 50) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
@@ -403,7 +403,7 @@ exports.createDatasetNonFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                adresse_changed_days: diffDays,
+                                adresse_changed_days: Number(diffDays),
                                 browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
                                 page_visited: Math.floor(Math.random() * 50) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
@@ -447,8 +447,7 @@ exports.createDatasetFraud = async (req, res) => {
         Adress.find({ state: { $nin: random_data.card_nationality1 } })
             .exec((err, addresses) => {
                 if (err) {
-                    logger.error({ message: err });
-                    process.exit();
+                    return res.status(500).json({ code: 500, message: err });
                 }
 
                 if (!addresses) {
@@ -467,18 +466,16 @@ exports.createDatasetFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                addresse_changed_days: 0,
                                 browsing_time_seconds: Math.floor(Math.random() * 200) + 10,
                                 page_visited: Math.floor(Math.random() * 3) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
                                 number_previous_orders: Math.floor(Math.random() * 2),
-                                items: generate_product(),
+                                items: product.generateProduct(),
                                 payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
                                 card_nationality: address.state,
                                 delivery_address: address,
                                 billing_country: address.state,
                                 billing_address: address.address,
-                                email_changed_days: 0,
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
                                 delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
@@ -489,7 +486,7 @@ exports.createDatasetFraud = async (req, res) => {
                                 type: 'fraud',
                             }).save((err) => {
                                 if (err) {
-                                    return res.status(200).json({ code: 500, message: err });
+                                    return res.status(422).json({ code: 422, message: err });
                                 }
                             });
 
@@ -498,18 +495,16 @@ exports.createDatasetFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                adresse_changed_days: 0,
                                 browsing_time_seconds: Math.floor(Math.random() * 200) + 10,
                                 page_visited: Math.floor(Math.random() * 3) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
                                 number_previous_orders: Math.floor(Math.random() * 2),
-                                items: generate_product(),
+                                items: product.generateProduct(),
                                 payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
                                 card_nationality: address.state,
                                 delivery_address: address,
                                 billing_country: address.state,
                                 billing_address: address.address,
-                                email_changed_days: 0,
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
                                 delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
@@ -520,13 +515,13 @@ exports.createDatasetFraud = async (req, res) => {
                                 type: 'fraud',
                             }).save((err) => {
                                 if (err) {
-                                    return res.status(200).json({ code: 500, message: err });
+                                    return res.status(422).json({ code: 422, message: err });
                                 }
                             });
                         }
                     }
 
-                    
+
                 }
 
 
@@ -559,18 +554,16 @@ exports.createDatasetFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                addresse_changed_days: 0,
                                 browsing_time_seconds: Math.floor(Math.random() * 200) + 10,
                                 page_visited: Math.floor(Math.random() * 3) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
                                 number_previous_orders: Math.floor(Math.random() * 2),
-                                items: generate_product(),
+                                items: product.generateProduct(),
                                 payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
                                 card_nationality: address.state,
                                 delivery_address: address,
                                 billing_country: address.state,
                                 billing_address: address.address,
-                                email_changed_days: 0,
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
                                 delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
@@ -581,7 +574,7 @@ exports.createDatasetFraud = async (req, res) => {
                                 type: 'fraud',
                             }).save((err) => {
                                 if (err) {
-                                    return res.status(200).json({ code: 500, message: err });
+                                    return res.status(422).json({ code: 422, message: err });
                                 }
                             });
 
@@ -590,18 +583,16 @@ exports.createDatasetFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                adresse_changed_days: 0,
                                 browsing_time_seconds: Math.floor(Math.random() * 200) + 10,
                                 page_visited: Math.floor(Math.random() * 3) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
                                 number_previous_orders: Math.floor(Math.random() * 2),
-                                items: generate_product(),
+                                items: product.generateProduct(),
                                 payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
                                 card_nationality: address.state,
                                 delivery_address: address,
                                 billing_country: address.state,
                                 billing_address: address.address,
-                                email_changed_days: 0,
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
                                 delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
@@ -612,11 +603,11 @@ exports.createDatasetFraud = async (req, res) => {
                                 type: 'fraud',
                             }).save((err) => {
                                 if (err) {
-                                    return res.status(200).json({ code: 500, message: err });
+                                    return res.status(422).json({ code: 422, message: err });
                                 }
                             });
                         }
-                    }                   
+                    }
                 }
             });
     }, 30000);
@@ -645,18 +636,16 @@ exports.createDatasetFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                addresse_changed_days: 0,
                                 browsing_time_seconds: Math.floor(Math.random() * 200) + 10,
                                 page_visited: Math.floor(Math.random() * 3) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
                                 number_previous_orders: Math.floor(Math.random() * 2),
-                                items: generate_product(),
+                                items: product.generateProduct(),
                                 payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
                                 card_nationality: address.state,
                                 delivery_address: address,
                                 billing_country: address.state,
                                 billing_address: address.address,
-                                email_changed_days: 0,
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
                                 delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
@@ -667,7 +656,7 @@ exports.createDatasetFraud = async (req, res) => {
                                 type: 'fraud',
                             }).save((err) => {
                                 if (err) {
-                                    return res.status(200).json({ code: 500, message: err });
+                                    return res.status(422).json({ code: 422, message: err });
                                 }
                             });
 
@@ -676,18 +665,16 @@ exports.createDatasetFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                adresse_changed_days: 0,
                                 browsing_time_seconds: Math.floor(Math.random() * 200) + 10,
                                 page_visited: Math.floor(Math.random() * 3) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
                                 number_previous_orders: Math.floor(Math.random() * 2),
-                                items: generate_product(),
+                                items: product.generateProduct(),
                                 payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
                                 card_nationality: address.state,
                                 delivery_address: address,
                                 billing_country: address.state,
                                 billing_address: address.address,
-                                email_changed_days: 0,
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
                                 delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
@@ -698,13 +685,13 @@ exports.createDatasetFraud = async (req, res) => {
                                 type: 'fraud',
                             }).save((err) => {
                                 if (err) {
-                                    return res.status(200).json({ code: 500, message: err });
+                                    return res.status(422).json({ code: 422, message: err });
                                 }
                             });
                         }
                     }
 
-                   
+
                 }
 
 
@@ -735,18 +722,16 @@ exports.createDatasetFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                addresse_changed_days: 0,
                                 browsing_time_seconds: Math.floor(Math.random() * 200) + 10,
                                 page_visited: Math.floor(Math.random() * 3) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
                                 number_previous_orders: Math.floor(Math.random() * 2),
-                                items: generate_product(),
+                                items: product.generateProduct(),
                                 payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
                                 card_nationality: address.state,
                                 delivery_address: address,
                                 billing_country: address.state,
                                 billing_address: address.address,
-                                email_changed_days: 0,
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
                                 delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
@@ -757,7 +742,7 @@ exports.createDatasetFraud = async (req, res) => {
                                 type: 'fraud',
                             }).save((err) => {
                                 if (err) {
-                                    return res.status(200).json({ code: 500, message: err });
+                                    return res.status(422).json({ code: 422, message: err });
                                 }
                             });
 
@@ -766,18 +751,16 @@ exports.createDatasetFraud = async (req, res) => {
                                 account_id: Math.floor(Math.random() * 80000) + 1,
                                 user_date_creation: date_create.toISOString(),
                                 payment_date: date_payment.toISOString(),
-                                adresse_changed_days: 0,
                                 browsing_time_seconds: Math.floor(Math.random() * 200) + 10,
                                 page_visited: Math.floor(Math.random() * 3) + 1,
                                 number_ticket_opened: Math.floor(Math.random() * 10),
                                 number_previous_orders: Math.floor(Math.random() * 2),
-                                items: generate_product(),
+                                items: product.generateProduct(),
                                 payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
                                 card_nationality: address.state,
                                 delivery_address: address,
                                 billing_country: address.state,
                                 billing_address: address.address,
-                                email_changed_days: 0,
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
                                 delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
@@ -788,10 +771,10 @@ exports.createDatasetFraud = async (req, res) => {
                                 type: 'fraud',
                             }).save((err) => {
                                 if (err) {
-                                    return res.status(200).json({ code: 500, message: err });
+                                    return res.status(422).json({ code: 422, message: err });
                                 }
-                                return res.status(200).json({ code: 201, message: ` ${req.query.number} dataset non fraud added with  successfully` });
                             });
+                            return res.status(200).json({ code: 201, message: ` ${req.query.number} dataset fraud added with  successfully` });
                         }
                     }
                 }
@@ -801,25 +784,108 @@ exports.createDatasetFraud = async (req, res) => {
 
 }
 
+
+//controller create dataset fraud 2
 exports.createDatasetFraud2 = async (req, res) => {
 
     if (!req.query.number) {
         return res.status(400).json({ message: 'number dataset not found' });
     }
 
-    // cardinality  proba 30%
-    Adress.find({ state: { $nin: random_data.card_nationality1 } })
-        .exec((err, addresses) => {
-            if (err) {
-                logger.error({ message: err });
-            }
+    setTimeout(() => {
+        // cardinality  proba 30%
+        Adress.find({ state: { $nin: random_data.card_nationality1 } })
+            .exec((err, addresses) => {
+                if (err) {
+                    logger.error({ message: err });
+                }
 
-            if (!addresses) {
-                logger.error({ message: "Adresse Not found." });
-            } else {
-                var datasets = [];
-                // cardinality proba non fraud 70%
-                size_payment_provider = Math.round(Number(req.query.number) * 0.3);
+                if (!addresses) {
+                    logger.error({ message: "Adresse Not found." });
+                } else {
+                    var datasets = [];
+                    // cardinality proba non fraud 70%
+                    size_payment_provider = Math.round(Number(req.query.number) * 0.3);
+                    for (let index = 0; index < size_payment_provider; index++) {
+                        const address = addresses[Math.floor(Math.random() * addresses.length)];
+                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        const date_payment = faker.date.between(date_create, Date.now());
+
+                        if (index < Math.round(Number(size_payment_provider) * 0.2)) {
+                            new Dataset({
+                                account_id: Math.floor(Math.random() * 80000) + 1,
+                                user_date_creation: date_create.toISOString(),
+                                payment_date: date_payment.toISOString(),
+                                browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
+                                page_visited: Math.floor(Math.random() * 50) + 1,
+                                number_ticket_opened: Math.floor(Math.random() * 10),
+                                number_previous_orders: Math.floor(Math.random() * 20),
+                                items: product.generateProduct(),
+                                payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
+                                card_nationality: address.state,
+                                delivery_address: address,
+                                billing_country: address.state,
+                                billing_address: address.address,
+                                email: faker.internet.email(),
+                                delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                                delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
+                                delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                                voucher: faker.datatype.boolean(),
+                                subscription: faker.datatype.boolean(),
+                                total: faker.commerce.price(80, 300),
+                                type: 'fraud2',
+                            }).save((err) => {
+                                if (err) {
+                                    return res.status(422).json({ code: 422, message: err });
+                                }
+                            });
+
+                        } else {
+                            new Dataset({
+                                account_id: Math.floor(Math.random() * 80000) + 1,
+                                user_date_creation: date_create.toISOString(),
+                                payment_date: date_payment.toISOString(),
+                                browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
+                                page_visited: Math.floor(Math.random() * 50) + 1,
+                                number_ticket_opened: Math.floor(Math.random() * 10),
+                                number_previous_orders: Math.floor(Math.random() * 20),
+                                items: product.generateProduct(),
+                                payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
+                                card_nationality: address.state,
+                                delivery_address: address,
+                                billing_country: address.state,
+                                billing_address: address.address,
+                                email: faker.internet.email(),
+                                delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                                delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
+                                delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                                voucher: faker.datatype.boolean(),
+                                subscription: faker.datatype.boolean(),
+                                total: faker.commerce.price(80, 300),
+                                type: 'fraud2',
+                            }).save((err) => {
+                                if (err) {
+                                    return res.status(422).json({ code: 422, message: err });
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+    }, 30000);
+
+    setTimeout(() => {
+        // cardinality proba 40%
+        Adress.find({ state: { $nin: random_data.card_nationality2 } })
+            .exec((err, addresses) => {
+                if (err) {
+                    logger.error({ message: err });
+                }
+
+                if (!addresses) {
+                    logger.error({ message: "Adresse Not found." });
+                }
+                size_payment_provider = Math.round(Number(req.query.number) * 0.4);
                 for (let index = 0; index < size_payment_provider; index++) {
                     const address = addresses[Math.floor(Math.random() * addresses.length)];
                     const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
@@ -830,7 +896,6 @@ exports.createDatasetFraud2 = async (req, res) => {
                             account_id: Math.floor(Math.random() * 80000) + 1,
                             user_date_creation: date_create.toISOString(),
                             payment_date: date_payment.toISOString(),
-                            addresse_changed_days: 0,
                             browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
                             page_visited: Math.floor(Math.random() * 50) + 1,
                             number_ticket_opened: Math.floor(Math.random() * 10),
@@ -841,7 +906,6 @@ exports.createDatasetFraud2 = async (req, res) => {
                             delivery_address: address,
                             billing_country: address.state,
                             billing_address: address.address,
-                            email_changed_days: 0,
                             email: faker.internet.email(),
                             delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
                             delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
@@ -852,7 +916,7 @@ exports.createDatasetFraud2 = async (req, res) => {
                             type: 'fraud2',
                         }).save((err) => {
                             if (err) {
-                                return res.status(200).json({ code: 500, message: err });
+                                return res.status(422).json({ code: 422, message: err });
                             }
                         });
 
@@ -861,7 +925,6 @@ exports.createDatasetFraud2 = async (req, res) => {
                             account_id: Math.floor(Math.random() * 80000) + 1,
                             user_date_creation: date_create.toISOString(),
                             payment_date: date_payment.toISOString(),
-                            adresse_changed_days: 0,
                             browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
                             page_visited: Math.floor(Math.random() * 50) + 1,
                             number_ticket_opened: Math.floor(Math.random() * 10),
@@ -872,7 +935,6 @@ exports.createDatasetFraud2 = async (req, res) => {
                             delivery_address: address,
                             billing_country: address.state,
                             billing_address: address.address,
-                            email_changed_days: 0,
                             email: faker.internet.email(),
                             delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
                             delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
@@ -883,260 +945,178 @@ exports.createDatasetFraud2 = async (req, res) => {
                             type: 'fraud2',
                         }).save((err) => {
                             if (err) {
-                                return res.status(200).json({ code: 500, message: err });
+                                return res.status(422).json({ code: 422, message: err });
                             }
                         });
                     }
-                }                
-            }
-        });
-
-    // cardinality proba 40%
-    Adress.find({ state: { $nin: random_data.card_nationality2 } })
-        .exec((err, addresses) => {
-            if (err) {
-                logger.error({ message: err });
-            }
-
-            if (!addresses) {
-                logger.error({ message: "Adresse Not found." });
-            }
-            var datasets = [];
-            size_payment_provider = Math.round(Number(req.query.number) * 0.4);
-            for (let index = 0; index < size_payment_provider; index++) {
-                const address = addresses[Math.floor(Math.random() * addresses.length)];
-                const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                const date_payment = faker.date.between(date_create, Date.now());
-
-                if (index < Math.round(Number(size_payment_provider) * 0.2)) {
-                    new Dataset({
-                        account_id: Math.floor(Math.random() * 80000) + 1,
-                        user_date_creation: date_create.toISOString(),
-                        payment_date: date_payment.toISOString(),
-                        addresse_changed_days: 0,
-                        browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
-                        page_visited: Math.floor(Math.random() * 50) + 1,
-                        number_ticket_opened: Math.floor(Math.random() * 10),
-                        number_previous_orders: Math.floor(Math.random() * 20),
-                        items: product.generateProduct(),
-                        payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
-                        card_nationality: address.state,
-                        delivery_address: address,
-                        billing_country: address.state,
-                        billing_address: address.address,
-                        email_changed_days: 0,
-                        email: faker.internet.email(),
-                        delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
-                        delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
-                        delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
-                        voucher: faker.datatype.boolean(),
-                        subscription: faker.datatype.boolean(),
-                        total: faker.commerce.price(80, 300),
-                        type: 'fraud2',
-                    }).save((err) => {
-                        if (err) {
-                            return res.status(200).json({ code: 500, message: err });
-                        }
-                    });
-
-                } else {
-                    new Dataset({
-                        account_id: Math.floor(Math.random() * 80000) + 1,
-                        user_date_creation: date_create.toISOString(),
-                        payment_date: date_payment.toISOString(),
-                        adresse_changed_days: 0,
-                        browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
-                        page_visited: Math.floor(Math.random() * 50) + 1,
-                        number_ticket_opened: Math.floor(Math.random() * 10),
-                        number_previous_orders: Math.floor(Math.random() * 20),
-                        items: product.generateProduct(),
-                        payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
-                        card_nationality: address.state,
-                        delivery_address: address,
-                        billing_country: address.state,
-                        billing_address: address.address,
-                        email_changed_days: 0,
-                        email: faker.internet.email(),
-                        delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
-                        delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
-                        delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
-                        voucher: faker.datatype.boolean(),
-                        subscription: faker.datatype.boolean(),
-                        total: faker.commerce.price(80, 300),
-                        type: 'fraud2',
-                    }).save((err) => {
-                        if (err) {
-                            return res.status(200).json({ code: 500, message: err });
-                        }
-                    });
                 }
-            }
 
-        });
+            });
+    }, 30000);
 
-    // cardinality proba 20%
-    Adress.find({ state: { $nin: random_data.card_nationality3 } })
-        .exec((err, addresses) => {
-            if (err) {
-                logger.error({ message: err });
-            }
-
-            if (!addresses) {
-                logger.error({ message: "Adresse Not found." });
-            }
-            // cardinality proba non fraud 70%
-            size_payment_provider = Math.round(Number(req.query.number) * 0.2);
-            for (let index = 0; index < size_payment_provider; index++) {
-                const address = addresses[Math.floor(Math.random() * addresses.length)];
-                const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                const date_payment = faker.date.between(date_create, Date.now());
-
-                if (index < Math.round(Number(size_payment_provider) * 0.2)) {
-                    new Dataset({
-                        account_id: Math.floor(Math.random() * 80000) + 1,
-                        user_date_creation: date_create.toISOString(),
-                        payment_date: date_payment.toISOString(),
-                        addresse_changed_days: 0,
-                        browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
-                        page_visited: Math.floor(Math.random() * 50) + 1,
-                        number_ticket_opened: Math.floor(Math.random() * 10),
-                        number_previous_orders: Math.floor(Math.random() * 20),
-                        items: product.generateProduct(),
-                        payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
-                        card_nationality: address.state,
-                        delivery_address: address,
-                        billing_country: address.state,
-                        billing_address: address.address,
-                        email_changed_days: 0,
-                        email: faker.internet.email(),
-                        delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
-                        delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
-                        delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
-                        voucher: faker.datatype.boolean(),
-                        subscription: faker.datatype.boolean(),
-                        total: faker.commerce.price(80, 300),
-                        type: 'fraud2',
-                    }).save((err) => {
-                        if (err) {
-                            return res.status(200).json({ code: 500, message: err });
-                        }
-                    });
-
-                } else {
-                    new Dataset({
-                        account_id: Math.floor(Math.random() * 80000) + 1,
-                        user_date_creation: date_create.toISOString(),
-                        payment_date: date_payment.toISOString(),
-                        adresse_changed_days: 0,
-                        browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
-                        page_visited: Math.floor(Math.random() * 50) + 1,
-                        number_ticket_opened: Math.floor(Math.random() * 10),
-                        number_previous_orders: Math.floor(Math.random() * 20),
-                        items: product.generateProduct(),
-                        payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
-                        card_nationality: address.state,
-                        delivery_address: address,
-                        billing_country: address.state,
-                        billing_address: address.address,
-                        email_changed_days: 0,
-                        email: faker.internet.email(),
-                        delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
-                        delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
-                        delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
-                        voucher: faker.datatype.boolean(),
-                        subscription: faker.datatype.boolean(),
-                        total: faker.commerce.price(80, 300),
-                        type: 'fraud2',
-                    }).save((err) => {
-                        if (err) {
-                            return res.status(200).json({ code: 500, message: err });
-                        }
-                    });
+    setTimeout(() => {
+        // cardinality proba 20%
+        Adress.find({ state: { $nin: random_data.card_nationality3 } })
+            .exec((err, addresses) => {
+                if (err) {
+                    logger.error({ message: err });
                 }
-            }          
-        });
 
-    // cardinality proba 10%
-    Adress.find({ state: { $nin: random_data.card_nationality4 } })
-        .exec((err, addresses) => {
-            if (err) {
-                logger.error({ message: err });
-            }
-
-            if (!addresses) {
-                logger.error({ message: "Adresse Not found." });
-            }
-            // cardinality proba non fraud 10%
-            size_payment_provider = Math.round(Number(req.query.number) * 0.1);
-            for (let index = 0; index < size_payment_provider; index++) {
-                const address = addresses[Math.floor(Math.random() * addresses.length)];
-                const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                const date_payment = faker.date.between(date_create, Date.now());
-
-                if (index < Math.round(Number(size_payment_provider) * 0.2)) {
-                    new Dataset({
-                        account_id: Math.floor(Math.random() * 80000) + 1,
-                        user_date_creation: date_create.toISOString(),
-                        payment_date: date_payment.toISOString(),
-                        addresse_changed_days: 0,
-                        browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
-                        page_visited: Math.floor(Math.random() * 50) + 1,
-                        number_ticket_opened: Math.floor(Math.random() * 10),
-                        number_previous_orders: Math.floor(Math.random() * 20),
-                        items: product.generateProduct(),
-                        payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
-                        card_nationality: address.state,
-                        delivery_address: address,
-                        billing_country: address.state,
-                        billing_address: address.address,
-                        email_changed_days: 0,
-                        email: faker.internet.email(),
-                        delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
-                        delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
-                        delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
-                        voucher: faker.datatype.boolean(),
-                        subscription: faker.datatype.boolean(),
-                        total: faker.commerce.price(80, 300),
-                        type: 'fraud2',
-                    }).save((err) => {
-                        if (err) {
-                            return res.status(200).json({ code: 500, message: err });
-                        }
-                    });
-
+                if (!addresses) {
+                    return res.status(500).json({ code: 500, message: `Adresse Not found :${addresses}` });
                 } else {
-                    new Dataset({
-                        account_id: Math.floor(Math.random() * 80000) + 1,
-                        user_date_creation: date_create.toISOString(),
-                        payment_date: date_payment.toISOString(),
-                        adresse_changed_days: 0,
-                        browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
-                        page_visited: Math.floor(Math.random() * 50) + 1,
-                        number_ticket_opened: Math.floor(Math.random() * 10),
-                        number_previous_orders: Math.floor(Math.random() * 20),
-                        items: product.generateProduct(),
-                        payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
-                        card_nationality: address.state,
-                        delivery_address: address,
-                        billing_country: address.state,
-                        billing_address: address.address,
-                        email_changed_days: 0,
-                        email: faker.internet.email(),
-                        delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
-                        delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
-                        delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
-                        voucher: faker.datatype.boolean(),
-                        subscription: faker.datatype.boolean(),
-                        total: faker.commerce.price(80, 300),
-                        type: 'fraud2',
-                    }).save((err) => {
-                        if (err) {
-                            return res.status(200).json({ code: 500, message: err });
-                        }
-                        return res.status(200).json({ code: 201, message: ` ${req.query.number} dataset fraud2 added with  successfully` });
+                    // cardinality proba non fraud 70%
+                    size_payment_provider = Math.round(Number(req.query.number) * 0.2);
+                    for (let index = 0; index < size_payment_provider; index++) {
+                        const address = addresses[Math.floor(Math.random() * addresses.length)];
+                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        const date_payment = faker.date.between(date_create, Date.now());
 
-                    });
+                        if (index < Math.round(Number(size_payment_provider) * 0.2)) {
+                            new Dataset({
+                                account_id: Math.floor(Math.random() * 80000) + 1,
+                                user_date_creation: date_create.toISOString(),
+                                payment_date: date_payment.toISOString(),
+                                browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
+                                page_visited: Math.floor(Math.random() * 50) + 1,
+                                number_ticket_opened: Math.floor(Math.random() * 10),
+                                number_previous_orders: Math.floor(Math.random() * 20),
+                                items: product.generateProduct(),
+                                payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
+                                card_nationality: address.state,
+                                delivery_address: address,
+                                billing_country: address.state,
+                                billing_address: address.address,
+                                email: faker.internet.email(),
+                                delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                                delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
+                                delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                                voucher: faker.datatype.boolean(),
+                                subscription: faker.datatype.boolean(),
+                                total: faker.commerce.price(80, 300),
+                                type: 'fraud2',
+                            }).save((err) => {
+                                if (err) {
+                                    return res.status(422).json({ code: 422, message: err });
+                                }
+                            });
+
+                        } else {
+                            new Dataset({
+                                account_id: Math.floor(Math.random() * 80000) + 1,
+                                user_date_creation: date_create.toISOString(),
+                                payment_date: date_payment.toISOString(),
+                                browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
+                                page_visited: Math.floor(Math.random() * 50) + 1,
+                                number_ticket_opened: Math.floor(Math.random() * 10),
+                                number_previous_orders: Math.floor(Math.random() * 20),
+                                items: product.generateProduct(),
+                                payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
+                                card_nationality: address.state,
+                                delivery_address: address,
+                                billing_country: address.state,
+                                billing_address: address.address,
+                                email: faker.internet.email(),
+                                delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                                delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
+                                delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                                voucher: faker.datatype.boolean(),
+                                subscription: faker.datatype.boolean(),
+                                total: faker.commerce.price(80, 300),
+                                type: 'fraud2',
+                            }).save((err) => {
+                                if (err) {
+                                    return res.status(422).json({ code: 422, message: err });
+                                }
+                            });
+                        }
+                    }
                 }
-            }            
-        });
+
+            });
+    }, 30000);
+
+    setTimeout(() => {
+        // cardinality proba 10%
+        Adress.find({ state: { $nin: random_data.card_nationality4 } })
+            .exec((err, addresses) => {
+                if (err) {
+                    logger.error({ message: err });
+                }
+
+                if (!addresses) {
+                    logger.error({ message: "Adresse Not found." });
+                } else {
+                    // cardinality proba non fraud 10%
+                    size_payment_provider = Math.round(Number(req.query.number) * 0.1);
+                    for (let index = 0; index < size_payment_provider; index++) {
+                        const address = addresses[Math.floor(Math.random() * addresses.length)];
+                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        const date_payment = faker.date.between(date_create, Date.now());
+
+                        if (index < Math.round(Number(size_payment_provider) * 0.2)) {
+                            new Dataset({
+                                account_id: Math.floor(Math.random() * 80000) + 1,
+                                user_date_creation: date_create.toISOString(),
+                                payment_date: date_payment.toISOString(),
+                                browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
+                                page_visited: Math.floor(Math.random() * 50) + 1,
+                                number_ticket_opened: Math.floor(Math.random() * 10),
+                                number_previous_orders: Math.floor(Math.random() * 20),
+                                items: product.generateProduct(),
+                                payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
+                                card_nationality: address.state,
+                                delivery_address: address,
+                                billing_country: address.state,
+                                billing_address: address.address,
+                                email: faker.internet.email(),
+                                delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                                delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
+                                delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                                voucher: faker.datatype.boolean(),
+                                subscription: faker.datatype.boolean(),
+                                total: faker.commerce.price(80, 300),
+                                type: 'fraud2',
+                            }).save((err) => {
+                                if (err) {
+                                    return res.status(422).json({ code: 422, message: err });
+                                }
+                            });
+
+                        } else {
+                            new Dataset({
+                                account_id: Math.floor(Math.random() * 80000) + 1,
+                                user_date_creation: date_create.toISOString(),
+                                payment_date: date_payment.toISOString(),
+                                browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
+                                page_visited: Math.floor(Math.random() * 50) + 1,
+                                number_ticket_opened: Math.floor(Math.random() * 10),
+                                number_previous_orders: Math.floor(Math.random() * 20),
+                                items: product.generateProduct(),
+                                payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
+                                card_nationality: address.state,
+                                delivery_address: address,
+                                billing_country: address.state,
+                                billing_address: address.address,
+                                email: faker.internet.email(),
+                                delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                                delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
+                                delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                                voucher: faker.datatype.boolean(),
+                                subscription: faker.datatype.boolean(),
+                                total: faker.commerce.price(80, 300),
+                                type: 'fraud2',
+                            }).save((err) => {
+                                if (err) {
+                                    return res.status(422).json({ code: 422, message: err }); 
+                                }
+                            });
+                            return res.status(201).json({ code: 201, message: ` ${req.query.number} dataset fraud 2 added with  successfully` });
+                        }
+                    }
+                }
+
+            });
+    }, 30000);
+
 }
