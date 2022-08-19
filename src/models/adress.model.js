@@ -18,6 +18,7 @@ const Adress = mongoose.model(
         versionKey: false,
         transform: function (doc, ret) {
             delete ret._id;
+            delete ret.id;
             delete ret.createdAt;
             delete ret.updateAt;
         },
