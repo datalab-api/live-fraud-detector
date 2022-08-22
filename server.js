@@ -18,7 +18,7 @@ const app = express();
 
 // process .env 
 const PORT = process.env.PORT || 8080;
-const HOSTNAME = process.env.HOST_API;
+const HOSTNAME = process.env.HOST_API || `127.0.0.1`;
 //const MONGO_URI = process.env.MONGO_URI_HOST;
 const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@kyndryl-mdb-livefraudde.xzg6f.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
 
@@ -88,7 +88,7 @@ app.use(session({
 
 // import doc swagger api 
 const swaggerDocument = require('./src/swagger.json');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 require("./src/routes/auth.routes")(app);
 require("./src/routes/user.routes")(app);
