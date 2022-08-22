@@ -73,12 +73,12 @@ jobs:
             context: ./
             file: ./Dockerfile
             push: true
-            tags: ${{ secrets.DOCKER_HUB_USERNAME }}//${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
+            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
           
         - name: Run the image in a container
           uses: addnab/docker-run-action@v3
           with:
-            image: ${{ secrets.DOCKER_HUB_USERNAME }}//${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
+            image: ${{ secrets.DOCKER_HUB_USERNAME }}/${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
             run: |
               echo "runing the docker image"
               echo "Test
