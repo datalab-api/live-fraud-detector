@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/datalab-api/live-fraud-detector#readme",
   "dependencies": {
+    "@vercel/node": "^2.5.8",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
