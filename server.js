@@ -1,5 +1,5 @@
 "use strict";
-require("dotenv").config({ path: "./.env.local" })
+require("dotenv").config({ path: "./.env" })
 const https = require("https");
 const http = require("http");
 const express = require("express");
