@@ -1,0 +1,21 @@
+---
+applications:
+    - name: live-demo
+      memory: 64M
+      instances: 1
+      command: npm start
+      buildpacks:
+          - nodejs_buildpack
+      timeout: 15
+      path: .
+      disk_quota: 128M
+      stack: cflinuxfs3
+      random-route: true
+      env:
+          NODE_ENV: production
+          MONGO_URI_HOST:
+          USERNAME_ADMIN: admin_ccbih
+          PASSWORD_ADMIN: Ccbihadoop20@
+          EMAIL_ADMIN: ccbihadoop@orange.com
+    #   routes:
+    #       - route: hhvv6071-bdfspm-backend.app.cloudfoundry-cluster1-z2.itn.intraorange
