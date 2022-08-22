@@ -1,16 +1,9 @@
 {
-    "env": {
-      "MONGO_URI": "MONGO_URI"
-    },
-    "headers": [
-      {
-        "source": "/(.*)",
-        "headers": [
-          {
-            "key": "Access-Control-Allow-Origin",
-            "value": "*"
-          }
-        ]
-      }
+    "version":2,
+    "routes":[
+        {
+            "src": "/",
+            "dest": "server.js"
+        }
     ]
-  }
+}
