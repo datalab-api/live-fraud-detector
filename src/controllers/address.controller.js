@@ -9,22 +9,23 @@ const Country = db.country;
 
 // logger info 
 var log4js = require("log4js");
+const Dataset = require("../models/dataset.model");
 var logger = log4js.getLogger();
 logger.level = "debug";
 exports.createAdress = async (req, res) => {
     if (!req.query.code) {
-        return res.status(400).json({ message: 'Body not found' });
+        return res.status(404).json({code: 404, data: 'Body not found' });
     }
     configSecret.options.url= `${API_ADRESS_RANDOM}.${req.query.code}.json`;
     Country.findById(
         {code: req.query.code}
     ).exec((err, country) => {
             if (err) {
-                return res.status(500).json({ message: err });
+                return res.status(500).json({ code: 500, data: err });
             }
 
             if (!country) {
-                return res.status(404).json({ message: ` country account does not exist ` });
+                return res.status(404).json({code: 404, data: ` country account does not exist ` });
             }
               
             if(req.query.occurence !== null){
@@ -75,7 +76,7 @@ exports.createAdress = async (req, res) => {
 
 exports.createAdressCrypted = async (req, res) => {
     if (!req.query.code) {
-        return res.status(400).json({ message: 'Body not found' });
+        return res.status(400).json({ data: 'Body not found' });
     }
     configSecret.options.url= `${API_ADRESS_RANDOM}.${req.query.code}.json`;
     request(configSecret.options, function (error, response) {
@@ -112,11 +113,11 @@ exports.findAdressByCode = async (req, res) => {
         .sort({ name: 1 })
         .exec((err, addresses) => {
             if (err) {
-                return res.status(500).send({ message: err });
+                return res.status(500).send({ data: err });
             }
 
             if (!addresses) {
-                return res.status(404).send({ message: "Adresse Not found." });
+                return res.status(404).send({ data: "Adresse Not found." });
             }
 
             res.status(200).json(adresse);
@@ -129,11 +130,11 @@ exports.findAllAdress = async (req, res) => {
     Adress.find().sort({state:1})
         .exec((err, addresses) => {
             if (err) {
-                return res.status(500).json({ message: err });
+                return res.status(500).json({ data: err });
             }
 
             if (!addresses) {
-                return res.status(404).json({ message: "Adresse Not found." });
+                return res.status(404).json({ data: "Adresse Not found." });
             }            
             res.status(200).json(addresses);
         });
@@ -143,11 +144,11 @@ exports.findAllAdressDecrypted = async (req, res) => {
     Adress.find().populate("ref_country", "-__v")
         .exec((err, addresses) => {
             if (err) {
-                return res.status(500).json({ message: err });
+                return res.status(500).json({ data: err });
             }
 
             if (!addresses) {
-                return res.status(404).json({ message: "Adresse Not found." });
+                return res.status(404).json({ data: "Adresse Not found." });
             }
             addresses.forEach(
                 (item) => {

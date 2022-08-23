@@ -1104,3 +1104,24 @@ exports.createDatasetFraud2 = async (req, res) => {
     }, 30000);
 
 }
+
+
+
+
+exports.deleteDataset = async (req,res) =>{
+    if (!req.query.type) {
+        return res.status(404).json({code:404, message: 'value of type dataset not found' });
+    }
+    Dataset.countDocuments({type:req.query.type},(err, count) => {
+        if (err) {
+            return res.status(401).json({ code: 401, message: err }); 
+        }
+        Dataset.deleteMany({type:req.query.type},(error) => {  
+            if (error) {
+                return res.status(401).json({ code: 401, message: error }); 
+            }
+            return res.status(200).json({ code: 200, message: `${count} to datasets collections deleted is succefully` }); 
+        });
+    });
+    
+}

@@ -1,5 +1,5 @@
 const { authJwt, verifySignUp} = require('../middlewares');
-const controller = require("../controllers/adress.controller");
+const controller = require("../controllers/address.controller");
 const BaseUrl = require('../config/endpoint.config');
 
 module.exports = function(app) {
@@ -12,23 +12,23 @@ module.exports = function(app) {
       });
     app.post(
         BaseUrl.endpoint+BaseUrl.version+ BaseUrl.ADRESS_BASE + BaseUrl.ADRESS_CREATE,
-        [
-            authJwt.verifyToken,
-            authJwt.isAdmin
-        ],
+        // [
+        //     authJwt.verifyToken,
+        //     authJwt.isAdmin
+        // ],
         controller.createAdress
     );
     // find all adresse
     app.get(
         BaseUrl.endpoint+BaseUrl.version+ BaseUrl.ADRESS_BASE + BaseUrl.ADRESS_FIND_ALL,
-        [authJwt.verifyToken, authJwt.isAdmin],
+        // [authJwt.verifyToken, authJwt.isAdmin],
         controller.findAllAdress
     );
 
     // find adresse info by code country
     app.get(
         BaseUrl.endpoint+BaseUrl.version+ BaseUrl.ADRESS_BASE + BaseUrl.ADRESS_FIND_BY_CODE,
-        [authJwt.verifyToken],
+       // [authJwt.verifyToken],
         controller.findAdressByCode
     );
 };

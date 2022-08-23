@@ -10,14 +10,28 @@ const mongoose = require("mongoose");
 const helmet = require("helmet");
 var session = require("express-session");
 const swaggerUi = require("swagger-ui-express");
+const YAML = require('yamljs');
+
+const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
+var morgan = require('morgan');
+const cfenv = require('cfenv');
+var appEnv = cfenv.getAppEnv();
+
+
+const app = express();
+
+
 var log4js = require("log4js");
 var logger = log4js.getLogger();
 logger.level = "debug";
 
-const app = express();
+// setup the logger
+app.use(morgan('combined'));
+
+
 
 // process .env 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT_BACKEND || 8080;
 const HOSTNAME = process.env.HOST_API || `localhost`;
 //const MONGO_URI = process.env.MONGO_URI_HOST;
 const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@kyndryl-mdb-livefraudde.xzg6f.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
@@ -39,7 +53,7 @@ mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   new Promise(r => setTimeout(r, 120000));
   initData.initialyUser();
   new Promise(r => setTimeout(r, 120000));
-  initData.generatorAdress();
+  //initData.generatorAdress();
   // setTimeout(() => {
   //   initData.initFraud();
   // }, 10000);  
@@ -53,7 +67,7 @@ var corsOptions = {
   origin: `http://${HOSTNAME}:${PORT}`,
   optionSuccessStatus: 200
 };
-app.use(cors(corsOptions));
+app.use(cors());
 //add security app
 app.use(cookieParser());
 app.use(helmet.contentSecurityPolicy());
@@ -76,23 +90,31 @@ app.use(helmet.xssFilter());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("trust proxy", 1) // trust first proxy
-app.use(session({
-  secret: require("./src/config/constantes").secret,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: true,
-    maxAge: 60000
+// app.use(session({
+//   secret: require("./src/config/constantes").secret,
+//   resave: true,
+//   saveUninitialized: true,
+//   cookie: {
+//     secure: true,
+//     maxAge: 60000
+//   }
+// }));
+
+app.use(expressCspHeader({
+  policies: {
+    'default-src': [expressCspHeader.NONE],
+    'img-src': [expressCspHeader.SELF],
   }
 }));
 
 // import doc swagger api 
-const swaggerDocument = require('./src/swagger.json');
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+//const swaggerDocument = require('./src/swagger.json');
+const swaggerDocument = YAML.load('./src/swagger.yaml');
+app.use('/api/REST/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 require("./src/routes/auth.routes")(app);
 require("./src/routes/user.routes")(app);
-require("./src/routes/adress.route")(app);
+require("./src/routes/address.route")(app);
 require("./src/routes/dataset.route")(app);
 
 

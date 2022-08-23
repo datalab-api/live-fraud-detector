@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const cert = path.join(__dirname, '../../certs/public.key') || require('crypto').randomBytes(64).toString('hex');
+const cert = path.join(__dirname, '../../certs/public.key') ;
 module.exports = {
     secret: fs.readFileSync(cert),
     jwtExpiration: 1800,           // 24 hour

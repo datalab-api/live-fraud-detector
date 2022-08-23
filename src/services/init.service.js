@@ -6,8 +6,8 @@ const path = require('path');
 const fs = require('fs');
 
 //joining path of directory 
-const directoryPath = path.join(__dirname, '../../adresses');
-var JsonDataCountry = require("../../data_template/CountryCodes.json");
+//const directoryPath = path.join(__dirname, '../../adresses');
+//var JsonDataCountry = require("../../data_template/CountryCodes.json");
 const random_data = require('../config/constantes');
 
 // logger info 
@@ -122,7 +122,7 @@ async function initialyUser() {
         }
     });
 }
-async function loadCountryCode() {
+async function loadCountryCode(JsonDataCountry) {
     // var data = "hello"
     // // Encrypt
     // var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), configSecret.secret).toString();
@@ -149,7 +149,7 @@ async function loadCountryCode() {
 
 }
 
-function generatorAdress() {
+function generatorAdress(directoryPath) {
     Adress.estimatedDocumentCount((err, count) => {
         if (count === 0 && !err) {
             logger.info("+ Load city  Code in MongoDB ... ");

@@ -62,7 +62,7 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
+          
           "application/json"
         ],
         "responses": {
@@ -87,7 +87,7 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
+          
           "application/json"
         ],
         "parameters": [
@@ -131,23 +131,12 @@
         "user_date_creation": {
           "type": "string",
           "format": "date-time"
-        },
-        "user_hour_creation": {
-          "type": "string",
-          "enum": [
-            "internal",
-            "external"
-          ]
-        },
+        },        
         "payment_date": {
           "type": "string",
           "format": "date-time",
           "description": "Is the data embargoed?"
-        },
-        "payment_hour": {
-          "type": "string",
-          "description": "indicate the terms of the embargo e.g. time period and any other special instructions."
-        },
+        },        
         "adresse_changed_days": {
           "type": "integer",
           "description": "Notes for the deposit reviewers"
@@ -163,15 +152,19 @@
           "type": "integer",
           "format": "date-time"
         },
+        "number_previous_orders": {
+          "type": "string",
+          "description": "Notes for the deposit reviewers"
+        },
         "items": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "item1": {
+              "item": {
                 "type": "string"
               },
-              "Quantiy": {
+              "quantity": {
                 "type": "int"
               }
             }
@@ -184,11 +177,7 @@
         "card_nationality": {
           "type": "string",
           "description": "Notes for the deposit reviewers"
-        },
-        "address_country": {
-          "type": "string",
-          "description": "Notes for the deposit reviewers"
-        },
+        },       
         "delivery_address": {
           "type": "string",
           "description": "Notes for the deposit reviewers"
@@ -200,27 +189,20 @@
         "billing_address": {
           "type": "string",
           "description": "Notes for the deposit reviewers"
-        },
-        "city": {
+        },  
+        "email": {
           "type": "string",
           "description": "Notes for the deposit reviewers"
         },
-        "zip": {
-          "type": "int",
-          "description": "Notes for the deposit reviewers"
-        },
-        "province": {
+        "type": {
           "type": "string",
           "description": "Notes for the deposit reviewers"
-        },
+        },      
         "email_changed_days": {
           "type": "int",
           "description": "Notes for the deposit reviewers"
         },
-        "dialling_code": {
-          "type": "string",
-          "description": "Notes for the deposit reviewers"
-        },
+        
         "delivery_company": {
           "type": "string",
           "description": "Notes for the deposit reviewers"
@@ -250,18 +232,36 @@
         "name": "MetadataSchema"
       }
     },
-    "CountryCode": {
+    "Adress": {
       "type": "object",
       "properties": {
-        "dial_code": {
-          "type": "integer",
-          "format": "int64"
+        "state": {
+          "type": "string",
         },
         "name": {
           "type": "string",
-          "title": "Country name"
         },
-        "code": {
+        "region": {
+          "type": "string",
+          "title": "Country ISO 3 code"
+        },
+        "city": {
+          "type": "string",
+          "title": "Country ISO 3 code"
+        },
+        "prov": {
+          "type": "string",
+          "title": "Country ISO 3 code"
+        },
+        "latt": {
+          "type": "string",
+          "title": "Country ISO 3 code"
+        },
+        "longt": {
+          "type": "string",
+          "title": "Country ISO 3 code"
+        },
+        "address": {
           "type": "string",
           "title": "Country ISO 3 code"
         }
