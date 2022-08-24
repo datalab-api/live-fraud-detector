@@ -101,43 +101,42 @@ exports.createAdressCrypted = async (req, res) => {
 
 }
 
-exports.findAdressByCode = async (req, res) => {
-    if (req.query.code) {
-        return res.status(404).send(` Request query not found `);
-    }
-    Adress.find(
-        { 
-            province: req.query.prov
-        }
-    ).populate("ref_country", "-__v")
-        .sort({ name: 1 })
-        .exec((err, addresses) => {
-            if (err) {
-                return res.status(500).send({ data: err });
-            }
-
-            if (!addresses) {
-                return res.status(404).send({ data: "Adresse Not found." });
-            }
-
-            res.status(200).json(adresse);
-        });
-}
-
 
 exports.findAllAdress = async (req, res) => {
-    
-    Adress.find().sort({state:1})
+    if(req.query.state){
+        Adress.find({state:req.query.state}).sort({city:1})
         .exec((err, addresses) => {
             if (err) {
-                return res.status(500).json({ data: err });
+                return res.status(500).json({ code: 500, data: err });
             }
 
             if (!addresses) {
-                return res.status(404).json({ data: "Adresse Not found." });
+                return res.status(404).json({code: 404, data: ` adress not found ` });
             }            
-            res.status(200).json(addresses);
+            res.status(200).json({
+                code: 200,
+                total_count: addresses.length,
+                addresses: addresses
+            });
         });
+    }else {
+        Adress.find().sort({state:1})
+        .exec((err, addresses) => {
+            if (err) {
+                return res.status(500).json({ code: 500, data: err });
+            }
+
+            if (!addresses) {
+                return res.status(404).json({code: 404, data: ` adress not found ` });
+            }            
+            res.status(200).json({
+                code: 200,
+                total_count: addresses.length,
+                addresses: addresses
+            });
+        });
+    }
+    
 }
 exports.findAllAdressDecrypted = async (req, res) => {
     

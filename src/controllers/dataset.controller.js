@@ -19,53 +19,80 @@ exports.createDataset = async (req, res) => {
 
 }
 
+
 exports.findAllDataset = async (req, res) => {
-
-    Dataset.find().sort({ account_id: 1 }).limit(1000000)
-        .exec((err, datasets) => {
-            if (err) {
-                return res.status(500).json({ message: err });
-            }
-
-            if (!datasets) {
-                return res.status(404).json({ message: "Adresse Not found." });
-            }
-            res.status(200).json(datasets);
-        });
-}
-
-exports.findDatasetByState = async (req, res) => {
-    if (!req.params.state) {
-        return res.status(400).json({ message: 'type country not found' });
+    if (!req.query.state) {
+        if (!req.query.type) {
+            Dataset.find().sort({ account_id: 1 }).limit(1000000)
+            .exec((err, datasets) => {
+                if (err) {
+                    return res.status(500).json({ code: 500, data: err });
+                }
+    
+                if (!datasets) {
+                    return res.status(404).json({code: 404, data: ` data not found ` });
+                }
+                res.status(200).json({
+                    code: 200,
+                    total_count: datasets.length,
+                    datasets: datasets
+                });
+            });
+        }else{
+            Dataset.find({ type: req.query.type }).sort({ account_id: 1 })
+            .exec((err, datasets) => {
+                if (err) {
+                    return res.status(500).json({ code: 500, data: err });
+                }
+    
+                if (!datasets) {
+                    return res.status(404).json({code: 404, data: ` data not found ` });
+                }
+                res.status(200).json({
+                    code: 200,
+                    total_count: datasets.length,
+                    datasets: datasets
+                });
+            });
+        }
+    }else{
+        if (!req.query.type) {
+            Dataset.find({ card_nationality: req.query.state }).sort({ account_id: 1 }).limit(1000000)
+            .exec((err, datasets) => {
+                if (err) {
+                    return res.status(500).json({ code: 500, data: err });
+                }
+    
+                if (!datasets) {
+                    return res.status(404).json({code: 404, data: ` data not found ` });
+                }
+                res.status(200).json({
+                    code: 200,
+                    total_count: datasets.length,
+                    datasets: datasets
+                });
+            });
+        }else{
+            Dataset.find({ type: req.query.type, card_nationality: req.query.state }).sort({ account_id: 1 })
+            .exec((err, datasets) => {
+                if (err) {
+                    return res.status(500).json({ code: 500, data: err });
+                }
+    
+                if (!datasets) {
+                    return res.status(404).json({code: 404, data: ` data not found ` });
+                }
+                res.status(200).json({
+                    code: 200,
+                    total_count: datasets.length,
+                    datasets: datasets
+                });
+            });
+        }
     }
-    Dataset.find({ state: req.params.state }).sort({ account_id: 1 })
-        .exec((err, datasets) => {
-            if (err) {
-                return res.status(500).json({ message: err });
-            }
+    
 
-            if (!datasets) {
-                return res.status(404).json({ message: "Adresse Not found." });
-            }
-            res.status(200).json(datasets);
-        });
-}
-
-exports.findAllDatasetByType = async (req, res) => {
-    if (!req.query.type) {
-        return res.status(400).json({ message: 'type dataset not found' });
-    }
-    Dataset.find({ type: req.query.type }).sort({ account_id: 1 })
-        .exec((err, datasets) => {
-            if (err) {
-                return res.status(500).json({ message: err });
-            }
-
-            if (!datasets) {
-                return res.status(404).json({ message: "Adresse Not found." });
-            }
-            res.status(200).json(datasets);
-        });
+    
 }
 
 exports.createDatasetNonFraud = async (req, res) => {
@@ -723,7 +750,7 @@ exports.createDatasetFraud = async (req, res) => {
                                 payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
                                 card_nationality: address.state,
                                 delivery_address: address,
-                                billing_country: address.state,
+                                billing_country: random_data.card_nationality1[Math.floor(Math.random() * random_data.card_nationality1.length)],
                                 billing_address: address.address,
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
@@ -751,7 +778,7 @@ exports.createDatasetFraud = async (req, res) => {
                                 payment_provider: random_data.payment_provider2[Math.floor(Math.random() * random_data.payment_provider2.length)],
                                 card_nationality: address.state,
                                 delivery_address: address,
-                                billing_country: address.state,
+                                billing_country:random_data.card_nationality1[Math.floor(Math.random() * random_data.card_nationality1.length)],
                                 billing_address: address.address,
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],

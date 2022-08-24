@@ -14,18 +14,14 @@ module.exports = {
     USER_UPDATE: '/edit/:id',
     USER_DELETE: '/delete/:id',
 
-    ADRESS_BASE : '/adresse',
-    ADRESS_CREATE : '/add',
-    ADRESS_FIND_BY_CODE : 'get',
-    ADRESS_FIND_ALL: '/list',
+    ADRESS_BASE : '/adresses',
+    ADRESS_CREATE : '/add',   
     ADRESS_CRYPTED_CREATE: 'crypted/add',
     ADRESS_CRYPTED_FIND: 'crypted/get',
 
-    DATASET_BASE: '/dataset',
+    DATASET_BASE: '/datasets',
     DATASET_CREATE: '/add',
-    DATASET_FIND_ALL:'/list',
-    DATASET_FIND_BY_TYPE : '/get',
-    DATASET_FIND_BY_STATE : '/get/:state',
+    DATASET_FIND:'/list',
 
     //non fraud 
     DATASET_BASE_NON_FRAUD :'/non-fraud',
