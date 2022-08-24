@@ -39,7 +39,7 @@ signup = (req, res) => {
                         if (err) {
                             return res.status(500).json({ code: 500, message: err });
                         }
-                        return res.status(201).json({ code: 201, message: `SUCCES : le compte ${user.username} a été créé avec succès ! ` });
+                        return res.status(201).json({ code: 201, message: `Account created was successfully ` });
                     });
                 }
             );

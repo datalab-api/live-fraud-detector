@@ -33,8 +33,8 @@ app.use(morgan('combined'));
 // process .env 
 const PORT = process.env.PORT_BACKEND || 8080;
 const HOSTNAME = process.env.HOST_API || `localhost`;
-const MONGO_URI = process.env.MONGO_URI_HOST;
-//const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@kyndryl-mdb-livefraudde.xzg6f.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
+//const MONGO_URI = process.env.MONGO_URI_HOST;
+const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@kyndryl-mdb-livefraudde.xzg6f.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
 
 const initData = require("./src/services/init.service");
 const optionsMongose = {

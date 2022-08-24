@@ -9,6 +9,7 @@ Abstract:xxx
 - [nodejs & npm](https://nodejs.org/en/)
 - [mongoDB](https://www.mongodb.com/docs/manual/administration/install-community/)
 - [python](https://www.python.org/downloads/)
+- [Postman](https://www.postman.com/)
 
 ## Use setup
 
@@ -42,6 +43,59 @@ Abstract:xxx
   npm start  
   ```
 
+  - login your app from to generate token JWT
+
+  ```bash
+  # curl command or Postman API
+  curl --location --request POST 'https://live-fraud-detector.eu-gb.mybluemix.net/api/REST/services/v1/oauth/token/login' \
+  --header 'Authorization: Basic YWRtaW46S3luZHJ5MjAyMSQ='
+  ```
+
+   ```bash
+    # Response : token JWT was created 
+    {
+      "code": 200,
+      "message": {
+          "id": "62f3ce867b6eae0b1a552068",
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZjNjZTg2N2I2ZWFlMGIxYTU1MjA2OCIsInVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6Im1hbWFkb3UuY2lyZS5ndWlzc2VAa3luZHJ5bC5jb20iLCJyb2xlIjpbIlJPTEVfQURNSU4iXSwidHlwZSI6IkJlYXJlciIsImlhdCI6MTY2MTM0MjE1MiwiZXhwIjoxNjYxMzQzOTUyfQ.c4nNXjD99v6cKgKK26_T7pjNqHURGY8hBnlwre9LeH4"
+      }
+    }
+  ```
+  
+- Get datasets your app API REST
+
+  ```bash
+    curl --location --request GET 'https://live-fraud-detector.eu-gb.mybluemix.net/api/REST/services/v1/adresses?state=FR' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZjNjZTg2N2I2ZWFlMGIxYTU1MjA2OCIsInVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6Im1hbWFkb3UuY2lyZS5ndWlzc2VAa3luZHJ5bC5jb20iLCJyb2xlIjpbIlJPTEVfQURNSU4iXSwidHlwZSI6IkJlYXJlciIsImlhdCI6MTY2MTM0MjE1MiwiZXhwIjoxNjYxMzQzOTUyfQ.c4nNXjD99v6cKgKK26_T7pjNqHURGY8hBnlwre9LeH4'
+  ```
+  
+  ```bash
+    # Response 
+    {
+      "code": 200,
+      "total_count": 4991,
+      "addresses": [
+          {
+              "state": "FR",
+              "name": "Abainville",
+              "region": "Meuse",
+              "city": "Abainville",
+              "prov": "Grand Est",
+              "latt": "48.53139",
+              "longt": "5.49444",
+              "address": "19, rue Salmonn02933 Alexandre",
+              "updatedAt": "2022-08-10T15:28:03.964Z"
+          },
+    .......
+  ```
+
+- Generate Datasets by type (fraud, fraud2, non-fraud)
+
+  ```bash
+  curl --location --request POST 'https://live-fraud-detector.eu-gb.mybluemix.net/api/REST/services/v1/datasets/${type}/add?number=50' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZjNjZTg2N2I2ZWFlMGIxYTU1MjA2OCIsInVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6Im1hbWFkb3UuY2lyZS5ndWlzc2VAa3luZHJ5bC5jb20iLCJyb2xlIjpbIlJPTEVfQURNSU4iXSwidHlwZSI6IkJlYXJlciIsImlhdCI6MTY2MTMzMzMzMywiZXhwIjoxNjYxMzM1MTMzfQ.kkyBf9TQdhMEVvz6PSK5y6adXtWh-s5uOHhqa4zY490'
+  ```
+
 ## Model schema
 
 | Model | Download |
@@ -51,61 +105,23 @@ Abstract:xxx
 | Model-3 | [download]() |
 
 ## Directory Hierarchy
+
 ```
+|—— .cfignore
+|—— .dockerignore
+|—— .env
+|—— .env.local
 |—— .github
 |    |—— workflows
 |        |—— nodejs.yml
 |—— .gitignore
-|—— apps
-|    |—— .env
-|    |—— .env.local
-|    |—— certs
-|        |—— admin-temp.key
-|        |—— admin.csr
-|        |—— admin.key
-|        |—— admin.pem
-|        |—— ca.key
-|        |—— ca.pem
-|    |—— package-lock.json
-|    |—— package.json
-|    |—— README.md
-|    |—— server.js
-|    |—— setup.sh
-|    |—— src
-|        |—— config
-|            |—— constantes.js
-|            |—— endpoint.config.js
-|            |—— non-fraud.constantes.js
-|        |—— controllers
-|            |—— adress.controller.js
-|            |—— auth.controller.js
-|            |—— country.controller.js
-|            |—— dataset-non-fraud.controller.js
-|            |—— dataset.controller.js
-|            |—— product.controller.js
-|            |—— user.controller.js
-|        |—— middlewares
-|            |—— authJwt.js
-|            |—— index.js
-|            |—— verifySignUp.js
-|        |—— models
-|            |—— adress.model.js
-|            |—— country-code.model.js
-|            |—— dataset.model.js
-|            |—— index.js
-|            |—— product.model.js
-|            |—— role.model.js
-|            |—— user.model.js
-|        |—— routes
-|            |—— adress.route.js
-|            |—— auth.routes.js
-|            |—— dataset.route.js
-|            |—— user.routes.js
-|        |—— services
-|            |—— dataset.service.js
-|            |—— init.service.js
-|            |—— signature.service.js
-|        |—— swagger.json
+|—— certs
+|    |—— admin.csr
+|    |—— admin.key
+|    |—— admin.pem
+|    |—— ca.key
+|    |—— ca.pem
+|    |—— public.key
 |—— data_template
 |    |—— archi-traitment.drawio
 |    |—— CountryCodes.json
@@ -113,46 +129,60 @@ Abstract:xxx
 |    |—— data_dictionnary_fraud2.txt
 |    |—— data_dictionnary_nonfraud.txt
 |    |—— data_template.json
-|—— load.py
-|—— main.py
-|—— mongo.py
-|—— README.md
-
+|    |—— Generate_random_addresses.ipynb
+|—— docker
+|    |—— docker-compose.debug.yml
+|    |—— docker-compose.yml
+|    |—— generate_data.py
+|—— Dockerfile
+|—— log.txt
+|—— manifest.yml
+|—— ML
+|    |—— datasets.json
+|    |—— data_processing.ipynb
+|—— package-lock.json
+|—— package.json
+|—— server.js
+|—— setup.sh
+|—— src
+|    |—— config
+|        |—— constantes.js
+|        |—— endpoint.config.js
+|    |—— controllers
+|        |—— address.controller.js
+|        |—— auth.controller.js
+|        |—— country.controller.js
+|        |—— dataset.controller.js
+|        |—— product.controller.js
+|        |—— user.controller.js
+|    |—— middlewares
+|        |—— authJwt.js
+|        |—— index.js
+|        |—— verifySignUp.js
+|    |—— models
+|        |—— adress.model.js
+|        |—— country-code.model.js
+|        |—— dataset.model.js
+|        |—— index.js
+|        |—— product.model.js
+|        |—— role.model.js
+|        |—— user.model.js
+|    |—— routes
+|        |—— address.route.js
+|        |—— auth.routes.js
+|        |—— dataset.route.js
+|        |—— user.routes.js
+|    |—— services
+|        |—— index.js
+|        |—— init.service.js
+|        |—— signature.service.js
+|    |—— swagger.json
+|    |—— swagger.yaml
 ```
 
-## Code Details
+## Deploy App in Cloud Foundry ibm
 
-### Tested Platform
 
-- software
-
-  ```
-  OS: Debian unstable (May 2021), Ubuntu LTS
-  Python: 3.8.5 (anaconda)
-  PyTorch: 1.7.1, 1.8.1
-  ```
-
-- hardware
-
-  ```
-  CPU: Intel Xeon 6226R
-  GPU: Nvidia RTX3090 (24GB)
-  ```
-
-### Hyper parameters
-
-```
-```
-
-## References
-
-- [paper-1]()
-- [paper-2]()
-- [code-1](https://github.com)
-- [code-2](https://github.com)
   
 ## License
 
-## Citing
-
-If you use xxx,please use the following BibTeX entry.
