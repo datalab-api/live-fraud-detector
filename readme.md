@@ -11,7 +11,7 @@ Abstract:xxx
 - [python](https://www.python.org/downloads/)
 - [Postman](https://www.postman.com/)
 
-## Use setup
+## Use setup app in localhost
 
 - Clone the repo and install the dependencies.
 
@@ -42,8 +42,29 @@ Abstract:xxx
   ```bash
   npm start  
   ```
+  
+- login your app from to generate token JWT
 
-  - login your app from to generate token JWT
+  ```bash
+  # curl command or Postman API
+  curl --location --request POST 'https://live-fraud-detector.eu-gb.mybluemix.net/api/REST/services/v1/oauth/token/login' \
+  --header 'Authorization: Basic YWRtaW46S3luZHJ5MjAyMSQ='
+  ```
+
+   ```bash
+    # Response : token JWT was created 
+    {
+      "code": 200,
+      "message": {
+          "id": "62f3ce867b6eae0b1a552068",
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZjNjZTg2N2I2ZWFlMGIxYTU1MjA2OCIsInVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6Im1hbWFkb3UuY2lyZS5ndWlzc2VAa3luZHJ5bC5jb20iLCJyb2xlIjpbIlJPTEVfQURNSU4iXSwidHlwZSI6IkJlYXJlciIsImlhdCI6MTY2MTM0MjE1MiwiZXhwIjoxNjYxMzQzOTUyfQ.c4nNXjD99v6cKgKK26_T7pjNqHURGY8hBnlwre9LeH4"
+      }
+    }
+  ```
+
+## Use setup app deployed in IBM CLoud foundry 
+We can using this command line from to using Database Mongo Atlas and app cloud foundry 
+- login your app from to generate token JWT
 
   ```bash
   # curl command or Postman API
@@ -96,13 +117,13 @@ Abstract:xxx
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZjNjZTg2N2I2ZWFlMGIxYTU1MjA2OCIsInVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6Im1hbWFkb3UuY2lyZS5ndWlzc2VAa3luZHJ5bC5jb20iLCJyb2xlIjpbIlJPTEVfQURNSU4iXSwidHlwZSI6IkJlYXJlciIsImlhdCI6MTY2MTMzMzMzMywiZXhwIjoxNjYxMzM1MTMzfQ.kkyBf9TQdhMEVvz6PSK5y6adXtWh-s5uOHhqa4zY490'
   ```
 
-## Model schema
-
-| Model | Download |
-| ---     | ---   |
-| Model-1 | [download]() |
-| Model-2 | [download]() |
-| Model-3 | [download]() |
+  ```bash
+  #Responses
+  {
+    "code": 201,
+    "message": " ${number} dataset ${type} added with  successfully"
+  }
+  ```
 
 ## Directory Hierarchy
 
@@ -180,8 +201,11 @@ Abstract:xxx
 |    |—— swagger.yaml
 ```
 
-## Deploy App in Cloud Foundry ibm
-
+## Swagger  API REST 
+We can copy this link in you web browser. 
+  ```bash
+  https://live-fraud-detector.eu-gb.mybluemix.net/api/REST/swagger/  
+  ```
 
   
 ## License
