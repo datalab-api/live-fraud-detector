@@ -22,7 +22,7 @@ Abstract:xxx
 
   ```bash
   # you may want to move in directory : live-fraud-detector/apps/
-  cd live-fraud-detector/apps/
+  cd live-fraud-detector/
   ```
 
    ```bash
@@ -63,8 +63,8 @@ Abstract:xxx
   ```
 
 ## Use setup app deployed in IBM CLoud foundry 
-We can using this command line from to using Database Mongo Atlas and app cloud foundry 
-- login your app from to generate token JWT
+This command allows you to query directly on the deployer app on cloud foundry.
+- login your app. from to generate token JWT
 
   ```bash
   # curl command or Postman API

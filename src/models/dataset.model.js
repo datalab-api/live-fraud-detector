@@ -13,7 +13,7 @@ const Dataset = mongoose.model(
         user_date_creation: { type: String },
         payment_date: { type: String },
         addresse_changed_days: { type: Number, default: 0 },
-        browsing_time_seconds: { type: Number, min : 10, max: 3600 },
+        browsing_time_seconds: { type: Number, min : 10 },
         page_visited: { type: Number },
         number_ticket_opened: { type: Number, default: 0},
         number_previous_orders : { type: Number },

@@ -26,6 +26,7 @@ module.exports = {
     //non fraud 
     DATASET_BASE_NON_FRAUD :'/non-fraud',
     DATASET_NON_FRAUD_ADD: '/add',
+    
     // fraud
     DATASET_BASE_FRAUD :'/fraud',
     DATASET_FRAUD_ADD: '/add',

@@ -44,8 +44,56 @@ module.exports = {
         "DZ", "LB", "SY", "EG", "LY", "TN", "IL", "MA", "JO", "PS"
     ],
     card_nationality4: "RU",
-    delivery_options: ["Standard", "Priority", "Express"],
-    delivery_places: ["collection_point", "home", "shop"],
+    delivery_options: [
+        "Standard", 
+        "Standard",
+        "Priority",
+        "Priority",
+        "Priority", 
+        "Express", 
+        "Express", 
+        "Express", 
+        "Express", 
+        "Express"
+    ],
+    delivery_places: [
+        "collection_point",
+        "collection_point",
+        "collection_point",
+        "collection_point",
+        "collection_point",
+        "collection_point",
+        "collection_point",
+        "collection_point",
+        "home",
+        "home", 
+        "shop"
+    ],
+    delivery_options2: [
+        "Standard", 
+        "Standard",
+        "Standard",
+        "Standard",
+        "Standard", 
+        "Priority", 
+        "Priority", 
+        "Priority", 
+        "Express", 
+        "Express"
+    ],
+    delivery_places2: [
+        "collection_point",
+        "collection_point",
+        "collection_point",
+        "home",
+        "home",
+        "home",
+        "home",
+        "home",
+        "home",
+        "home", 
+        "shop"
+    ],
     delivery_companies: [
         "Colissimo",
         "Chronospost",

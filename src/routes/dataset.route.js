@@ -50,5 +50,14 @@ module.exports = function (app) {
         controller.createDatasetFraud2
     );
 
+    // delete
+    app.delete(
+        BaseUrl.endpoint + BaseUrl.version + BaseUrl.DATASET_BASE,
+        [
+            authJwt.verifyToken,
+            authJwt.isAdmin
+        ],
+        controller.deleteDataset
+    );
 
 };
