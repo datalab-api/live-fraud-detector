@@ -18,4 +18,4 @@ applications:
           HOST_API: 0.0.0.0
           PORT_BACKEND: 8080
       routes:
-        - route: live-fraud-detector.eu-gb.mybluemix.net
+        - route: live-fraud-detector.eu-gb.cf.appdomain.cloud

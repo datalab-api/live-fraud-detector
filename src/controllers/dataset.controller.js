@@ -14,10 +14,140 @@ var logger = log4js.getLogger();
 logger.level = "debug";
 
 const list_card = random_data.card_nationality1.concat(random_data.card_nationality2, random_data.card_nationality3, random_data.card_nationality4);
+const list_provides = random_data.payment_provider1.concat(random_data.payment_provider2);
 
+let address = null;
+let date_create = null;
+let date_payment = null;
 
 exports.createDataset = async (req, res) => {
 
+    if (!req.query.type) {
+        return res.status(400).json({ message: 'type of  dataset not found' });
+    } else {
+        Adress.find({ state: { $nin: list_card } }).setOptions({ allowDiskUse: true })
+            .exec((err, addresses) => {
+                if (err) {
+                    logger.error({ message: err });
+                }
+
+                if (!addresses) {
+                    logger.error({ message: "Adresse Not found." });
+                } else {
+                    if (req.query.type === 'fraud') {
+                        logger.info(req.query.type);
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.soon(1, date_create);
+
+                        new Dataset({
+                            account_id: Math.floor(Math.random() * 80000) + 1,
+                            user_date_creation: date_create.toISOString(),
+                            payment_date: date_payment.toISOString(),
+                            browsing_time_seconds: Math.floor(Math.random() * 200) + 10,
+                            page_visited: Math.floor(Math.random() * 3) + 1,
+                            number_previous_orders: Math.floor(Math.random() * 2),
+                            items: product.generateProduct(),
+                            payment_provider: list_provides[Math.floor(Math.random() * list_provides.length)],
+                            card_nationality: list_card[Math.floor(Math.random() * list_card.length)],
+                            delivery_address: address,
+                            billing_country: address.state,
+                            billing_address: address.address,
+                            email: faker.internet.email(),
+                            delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                            delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
+                            delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                            voucher: false,
+                            subscription: false,
+                            total: faker.commerce.price(80, 300),
+                            type: 'fraud',
+                        }).save((err) => {
+                            if (err) {
+                                return res.status(422).json({ code: 422, message: err });
+                            }
+                            return res.status(200).json({ code: 201, message: ` dataset type  ${req.query.type} added with  successfully` });
+
+                        });
+
+                    } else if (req.query.type === 'fraud2') {
+                        logger.info(req.query.type);
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.between(date_create, Date.now());
+                        new Dataset({
+                            account_id: Math.floor(Math.random() * 80000) + 1,
+                            user_date_creation: date_create.toISOString(),
+                            payment_date: date_payment.toISOString(),
+                            browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
+                            page_visited: Math.floor(Math.random() * 50) + 1,
+                            number_ticket_opened: Math.floor(Math.random() * 10),
+                            number_previous_orders: Math.floor(Math.random() * 20),
+                            items: product.generateProduct(),
+                            payment_provider: list_provides[Math.floor(Math.random() * list_provides.length)],
+                            card_nationality: address.state,
+                            delivery_address: address,
+                            billing_country: address.state,
+                            billing_address: address.address,
+                            email: faker.internet.email(),
+                            delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                            delivery_place: 'collection_point',
+                            delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                            subscription: faker.datatype.boolean(),
+                            total: faker.commerce.price(80, 300),
+                            type: 'fraud2',
+                        }).save((err) => {
+                            if (err) {
+                                res.status(500).send({ code: 500, message: err });
+                            }
+                            return res.status(200).json({ code: 201, message: ` dataset type  ${req.query.type} added with  successfully` });
+
+                        });
+
+                    } else {
+                        logger.info(req.query.type);
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.between(date_create, Date.now());
+                        const diffTime = Math.abs(date_payment - date_create);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                        new Dataset({
+                            account_id: Math.floor(Math.random() * 80000) + 1,
+                            user_date_creation: date_create.toISOString(),
+                            payment_date: date_payment.toISOString(),
+                            addresse_changed_days: Number(diffDays),
+                            browsing_time_seconds: Math.floor(Math.random() * 3600) + 10,
+                            page_visited: Math.floor(Math.random() * 50) + 1,
+                            number_ticket_opened: Math.floor(Math.random() * 10),
+                            number_previous_orders: Math.floor(Math.random() * 20),
+                            items: product.generateProduct(),
+                            payment_provider: random_data.payment_provider1[Math.floor(Math.random() * random_data.payment_provider1.length)],
+                            card_nationality: address.state,
+                            delivery_address: address,
+                            billing_country: address.state,
+                            billing_address: address.address,
+                            email_changed_days: Number(diffDays),
+                            email: faker.internet.email(),
+                            delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
+                            delivery_place: random_data.delivery_places2[Math.floor(Math.random() * random_data.delivery_places2.length)],
+                            delivery_option: random_data.delivery_options2[Math.floor(Math.random() * random_data.delivery_options2.length)],
+                            voucher: faker.datatype.boolean(),
+                            subscription: faker.datatype.boolean(),
+                            total: faker.commerce.price(5, 10000),
+                            type: 'non-fraud',
+                        }).save((err) => {
+                            if (err) {
+                                return res.status(422).json({ code: 422, message: err });
+                            }
+                            return res.status(200).json({ code: 201, message: ` dataset type  ${req.query.type} added with  successfully` });
+
+                        });
+
+                    }
+
+                }
+            });
+    }
 }
 
 
@@ -115,9 +245,9 @@ exports.createDatasetNonFraud = async (req, res) => {
                     // cardinality proba non fraud 70%
                     size_payment_provider_70 = Math.round(Number(req.query.number) * 0.7);
                     for (let index = 0; index < size_payment_provider_70; index++) {
-                        const address = addresses[Math.floor(Math.random() * addresses.length)];
-                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                        const date_payment = faker.date.between(date_create, Date.now());
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.between(date_create, Date.now());
                         const diffTime = Math.abs(date_payment - date_create);
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -205,9 +335,9 @@ exports.createDatasetNonFraud = async (req, res) => {
                 } else {
                     size_payment_provider_15 = Math.round(Number(req.query.number) * 0.15);
                     for (let index = 0; index < size_payment_provider_15; index++) {
-                        const address = addresses[Math.floor(Math.random() * addresses.length)];
-                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                        const date_payment = faker.date.between(date_create, Date.now());
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.between(date_create, Date.now());
                         // const date_payment = faker.date.soon(10, date_create);
                         const diffTime = Math.abs(date_payment - date_create);
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -299,9 +429,9 @@ exports.createDatasetNonFraud = async (req, res) => {
                     // cardinality proba non fraud 70%
                     size_payment_provider_10 = Math.round(Number(req.query.number) * 0.1);
                     for (let index = 0; index < size_payment_provider_10; index++) {
-                        const address = addresses[Math.floor(Math.random() * addresses.length)];
-                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                        const date_payment = faker.date.between(date_create, Date.now());
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.between(date_create, Date.now());
                         const diffTime = Math.abs(date_payment - date_create);
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -389,9 +519,9 @@ exports.createDatasetNonFraud = async (req, res) => {
                     // cardinality proba non fraud 5%
                     size_payment_provider_5 = Math.round(Number(req.query.number) * 0.05);
                     for (let index = 0; index < size_payment_provider_5; index++) {
-                        const address = addresses[Math.floor(Math.random() * addresses.length)];
-                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                        const date_payment = faker.date.between(date_create, Date.now());
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.between(date_create, Date.now());
                         const diffTime = Math.abs(date_payment - date_create);
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -470,7 +600,7 @@ exports.createDatasetFraud = async (req, res) => {
     if (!req.query.number) {
         return res.status(400).json({ message: 'number dataset not found' });
     }
-   
+
     setTimeout(() => {
         Adress.find({ state: { $nin: random_data.card_nationality1 } }).setOptions({ allowDiskUse: true })
             .exec((err, addresses) => {
@@ -485,9 +615,9 @@ exports.createDatasetFraud = async (req, res) => {
                     size_payment_provider = Math.round(Number(req.query.number) * 0.3);
 
                     for (let index = 0; index < size_payment_provider; index++) {
-                        const address = addresses[Math.floor(Math.random() * addresses.length)];
-                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                        const date_payment = faker.date.soon(1, date_create);
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.soon(1, date_create);
 
 
                         if (index < Math.round(Number(size_payment_provider) * 0.2)) {
@@ -507,7 +637,7 @@ exports.createDatasetFraud = async (req, res) => {
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
                                 delivery_place: random_data.delivery_places[Math.floor(Math.random() * random_data.delivery_places.length)],
-                                delivery_option:  random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
+                                delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
                                 voucher: false,
                                 subscription: false,
                                 total: faker.commerce.price(80, 300),
@@ -571,9 +701,9 @@ exports.createDatasetFraud = async (req, res) => {
                 } else {
                     size_payment_provider = Math.round(Number(req.query.number) * 0.4);
                     for (let index = 0; index < size_payment_provider; index++) {
-                        const address = addresses[Math.floor(Math.random() * addresses.length)];
-                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                        const date_payment = faker.date.soon(1, date_create);
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.soon(1, date_create);
 
                         if (index < Math.round(Number(size_payment_provider) * 0.2)) {
                             new Dataset({
@@ -651,9 +781,9 @@ exports.createDatasetFraud = async (req, res) => {
                     // cardinality proba non fraud 70%
                     size_payment_provider = Math.round(Number(req.query.number) * 0.2);
                     for (let index = 0; index < size_payment_provider; index++) {
-                        const address = addresses[Math.floor(Math.random() * addresses.length)];
-                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                        const date_payment = faker.date.soon(1, date_create);
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.soon(1, date_create);
 
                         if (index < Math.round(Number(size_payment_provider) * 0.2)) {
                             new Dataset({
@@ -735,9 +865,9 @@ exports.createDatasetFraud = async (req, res) => {
                     // cardinality proba non fraud 70%
                     size_payment_provider = Math.round(Number(req.query.number) * 0.1);
                     for (let index = 0; index < size_payment_provider; index++) {
-                        const address = addresses[Math.floor(Math.random() * addresses.length)];
-                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                        const date_payment = faker.date.soon(1, date_create);
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.soon(1, date_create);
 
                         if (index < Math.round(Number(size_payment_provider) * 0.2)) {
                             new Dataset({
@@ -841,9 +971,9 @@ exports.createDatasetFraud2 = async (req, res) => {
                     // cardinality proba non fraud 70%
                     size_payment_provider = Math.round(Number(req.query.number) * 0.3);
                     for (let index = 0; index < size_payment_provider; index++) {
-                        const address = addresses[Math.floor(Math.random() * addresses.length)];
-                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                        const date_payment = faker.date.between(date_create, Date.now());
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.between(date_create, Date.now());
 
                         if (index < Math.round(Number(size_payment_provider) * 0.2)) {
                             new Dataset({
@@ -862,7 +992,7 @@ exports.createDatasetFraud2 = async (req, res) => {
                                 billing_address: address.address,
                                 email: faker.internet.email(),
                                 delivery_company: random_data.delivery_companies[Math.floor(Math.random() * random_data.delivery_companies.length)],
-                                delivery_place:'collection_point',
+                                delivery_place: 'collection_point',
                                 delivery_option: random_data.delivery_options[Math.floor(Math.random() * random_data.delivery_options.length)],
                                 subscription: faker.datatype.boolean(),
                                 total: faker.commerce.price(80, 300),
@@ -919,9 +1049,9 @@ exports.createDatasetFraud2 = async (req, res) => {
                 }
                 size_payment_provider = Math.round(Number(req.query.number) * 0.4);
                 for (let index = 0; index < size_payment_provider; index++) {
-                    const address = addresses[Math.floor(Math.random() * addresses.length)];
-                    const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                    const date_payment = faker.date.between(date_create, Date.now());
+                    address = addresses[Math.floor(Math.random() * addresses.length)];
+                    date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                    date_payment = faker.date.between(date_create, Date.now());
 
                     if (index < Math.round(Number(size_payment_provider) * 0.2)) {
                         new Dataset({
@@ -998,9 +1128,9 @@ exports.createDatasetFraud2 = async (req, res) => {
                     // cardinality proba non fraud 70%
                     size_payment_provider = Math.round(Number(req.query.number) * 0.2);
                     for (let index = 0; index < size_payment_provider; index++) {
-                        const address = addresses[Math.floor(Math.random() * addresses.length)];
-                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                        const date_payment = faker.date.between(date_create, Date.now());
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.between(date_create, Date.now());
 
                         if (index < Math.round(Number(size_payment_provider) * 0.2)) {
                             new Dataset({
@@ -1079,9 +1209,9 @@ exports.createDatasetFraud2 = async (req, res) => {
                     // cardinality proba non fraud 10%
                     size_payment_provider = Math.round(Number(req.query.number) * 0.1);
                     for (let index = 0; index < size_payment_provider; index++) {
-                        const address = addresses[Math.floor(Math.random() * addresses.length)];
-                        const date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
-                        const date_payment = faker.date.between(date_create, Date.now());
+                        address = addresses[Math.floor(Math.random() * addresses.length)];
+                        date_create = faker.date.between('2017-01-01T00:00:00.000Z', Date.now());
+                        date_payment = faker.date.between(date_create, Date.now());
 
                         if (index < Math.round(Number(size_payment_provider) * 0.2)) {
                             new Dataset({
