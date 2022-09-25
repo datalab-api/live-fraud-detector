@@ -7,7 +7,7 @@ let CountedId = { type: Number, default: () => counter++ };
 
 
 const Dataset = mongoose.model(
-    "Dataset",
+    "DatasetV2",
     new mongoose.Schema({
         account_id: { type: Number, min:0, max:80000},
         user_date_creation: { type: String },
@@ -32,18 +32,16 @@ const Dataset = mongoose.model(
         voucher: { type: Boolean, default: false },
         subscription: { type: Boolean, default: false },
         total: { type: String}
-    },
-        { timestamps: true }
-    ).set("toJSON", {
+    }).set("toJSON", {
         getters: true,
         minimize: false,
-        virtuals: true,
+        virtuals: false,
         versionKey: false,
         transform: function (doc, ret) {
             delete ret._id;
-            delete ret.createdAt;
             delete ret.type;
-            delete ret.updatedAt;            
+            delete ret.id;  
+            delete ret.createdAt;       
         },
     })
 );

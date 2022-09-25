@@ -12,6 +12,7 @@ var session = require("express-session");
 const swaggerUi = require("swagger-ui-express");
 const YAML = require('yamljs');
 
+
 const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 var morgan = require('morgan');
 const cfenv = require('cfenv');
@@ -49,6 +50,12 @@ const optionsMongose = {
 // mongo connect
 mongoose.connect(MONGO_URI, optionsMongose).then(() => {
   logger.info("MongoDB : Connection established successfully ....");
+  mongoose.connection.db.listCollections().toArray(function (err, names) {
+    //.log(names); // [{ name: 'dbname.myCollection' }]
+    names.forEach(element => {
+      console.log(element.name)
+    });
+});
   initData.initialyRoles();
   new Promise(r => setTimeout(r, 120000));
   initData.initialyUser();
@@ -107,6 +114,9 @@ app.use(expressCspHeader({
   }
 }));
 
+
+
+
 // import doc swagger api 
 //const swaggerDocument = require('./src/swagger.json');
 const swaggerDocument = YAML.load('./src/swagger.yaml');
@@ -117,6 +127,9 @@ require("./src/routes/user.routes")(app);
 require("./src/routes/address.route")(app);
 require("./src/routes/dataset.route")(app);
 
+app.get('/', function(req, res){
+  res.sendFile(__dirname+'/index.html');
+})
 
 http.createServer(corsOptions, app).listen(PORT, () => {
   logger.info(`Server running at http://${HOSTNAME}:${PORT} ...`);

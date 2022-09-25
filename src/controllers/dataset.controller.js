@@ -1,5 +1,8 @@
 const { faker } = require('@faker-js/faker');
 var bcrypt = require("bcryptjs");
+var fs = require('fs');
+var path = require('path');
+
 const random_data = require('../config/constantes');
 const product = require('../services/init.service');
 
@@ -12,6 +15,10 @@ const Adress = db.adress;
 var log4js = require("log4js");
 var logger = log4js.getLogger();
 logger.level = "debug";
+
+const filePath = path.join(__dirname, '../../data');
+fs.existsSync(filePath) || fs.mkdirSync(filePath);
+
 
 const list_card = random_data.card_nationality1.concat(random_data.card_nationality2, random_data.card_nationality3, random_data.card_nationality4);
 const list_provides = random_data.payment_provider1.concat(random_data.payment_provider2);
@@ -61,11 +68,21 @@ exports.createDataset = async (req, res) => {
                             subscription: false,
                             total: faker.commerce.price(80, 300),
                             type: 'fraud',
-                        }).save((err) => {
+                        }).save((err, data) => {
                             if (err) {
                                 return res.status(422).json({ code: 422, message: err });
                             }
-                            return res.status(200).json({ code: 201, message: ` dataset type  ${req.query.type} added with  successfully` });
+                            fs.writeFile(path.join(filePath,'data.json'), JSON.stringify(data, null, 2), 'utf8', function (err) {
+                                if (err) {
+                                    console.log("An error occured while writing JSON Object to File.");
+                                    return console.log(err);
+                                }                             
+                            });
+                            return res.status(200).json({ 
+                                code: 201, 
+                                message: ` dataset type  ${req.query.type} added with  successfully`,
+                                data: data
+                            });
 
                         });
 
@@ -95,11 +112,21 @@ exports.createDataset = async (req, res) => {
                             subscription: faker.datatype.boolean(),
                             total: faker.commerce.price(80, 300),
                             type: 'fraud2',
-                        }).save((err) => {
+                        }).save((err, data) => {
                             if (err) {
                                 res.status(500).send({ code: 500, message: err });
                             }
-                            return res.status(200).json({ code: 201, message: ` dataset type  ${req.query.type} added with  successfully` });
+                            fs.writeFile(path.join(filePath,'data.json'), JSON.stringify(data, null, 2), 'utf8', function (err) {
+                                if (err) {
+                                    console.log("An error occured while writing JSON Object to File.");
+                                    return console.log(err);
+                                }                             
+                            });
+                            return res.status(200).json({ 
+                                code: 201, 
+                                message: ` dataset type  ${req.query.type} added with  successfully`,
+                                data: data
+                            });
 
                         });
 
@@ -135,11 +162,21 @@ exports.createDataset = async (req, res) => {
                             subscription: faker.datatype.boolean(),
                             total: faker.commerce.price(5, 10000),
                             type: 'non-fraud',
-                        }).save((err) => {
+                        }).save((err, data) => {
                             if (err) {
                                 return res.status(422).json({ code: 422, message: err });
                             }
-                            return res.status(200).json({ code: 201, message: ` dataset type  ${req.query.type} added with  successfully` });
+                            fs.writeFile(path.join(filePath,'data.json'), JSON.stringify(data, null, 2), 'utf8', function (err) {
+                                if (err) {
+                                    console.log("An error occured while writing JSON Object to File.");
+                                    return console.log(err);
+                                }                             
+                            });
+                            return res.status(200).json({ 
+                                code: 201, 
+                                message: ` dataset type  ${req.query.type} added with  successfully`,
+                                data: data
+                            });
 
                         });
 

@@ -1,0 +1,46 @@
+{
+  "addresse_changed_days": 0,
+  "number_ticket_opened": 0,
+  "items": [
+    {
+      "name": "Practical Metal Shoes",
+      "quantity": 8
+    },
+    {
+      "name": "Sleek Granite Keyboard",
+      "quantity": 6
+    },
+    {
+      "name": "Tasty Rubber Towels",
+      "quantity": 3
+    }
+  ],
+  "email_changed_days": 0,
+  "voucher": false,
+  "subscription": false,
+  "account_id": 64031,
+  "user_date_creation": "2017-03-16T15:03:14.812Z",
+  "payment_date": "2017-03-17T07:22:50.364Z",
+  "browsing_time_seconds": 22,
+  "page_visited": 3,
+  "number_previous_orders": 1,
+  "payment_provider": "Amazon Pay",
+  "card_nationality": "RO",
+  "delivery_address": {
+    "state": "KS",
+    "name": "Mirena",
+    "region": "Lipjan",
+    "city": "Mirena",
+    "prov": "Pristina",
+    "latt": "42.55917",
+    "longt": "20.96528",
+    "address": "4372 Stacy RestnEast Michaelmouth, CA 77350"
+  },
+  "billing_country": "KS",
+  "billing_address": "4372 Stacy RestnEast Michaelmouth, CA 77350",
+  "email": "Wellington_Wisozk17@yahoo.com",
+  "delivery_company": "DHL",
+  "delivery_place": "collection_point",
+  "delivery_option": "Express",
+  "total": "256.00"
+}

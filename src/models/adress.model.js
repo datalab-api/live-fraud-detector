@@ -20,7 +20,7 @@ const Adress = mongoose.model(
             delete ret._id;
             delete ret.id;
             delete ret.createdAt;
-            delete ret.updateAt;
+            delete ret.updatedAt;
         },
     })
 );
